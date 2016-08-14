@@ -683,14 +683,14 @@ a {
   left: 0;
 }
 #header .switch-part2 {
-  /* left: 100%; */
+  left: 100%;
   top: 20px;
   overlay-x: hidden;
   overflow-y: auto;
   max-height: 200px;
 }
 #header .switch-part3 {
- /*  left: 200%; */
+  left: 200%;
   line-height: 30px;
 }
 #header .switch-part3 .switch-friends-link {
@@ -703,10 +703,9 @@ a {
   color: #fff;
 }
 #header .switch-part4 {
- /*  left: 300%; */
+  left: 300%;
   text-align: left;
   line-height: 30px;
-  top:200px;
 }
 .duoshuo {
   padding: 0 40px;
