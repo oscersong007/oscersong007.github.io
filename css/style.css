@@ -690,7 +690,7 @@ a {
   max-height: 200px;
 }
 #header .switch-part3 {
- /*  left: 200%; */
+  left: 200%; 
   line-height: 30px;
 }
 #header .switch-part3 .switch-friends-link {
