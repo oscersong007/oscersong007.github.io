@@ -2009,9 +2009,6 @@ pre .css ~ * .id {
   position: absolute;
   bottom: 6px;
 }
-#header .tagcloud a {
-  color: #fff;
-}
 .tagcloud a {
   display: inline-block;
   text-decoration: none;
