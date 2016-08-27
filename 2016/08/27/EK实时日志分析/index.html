@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>EK实时日志分析 | 爱生活爱编码</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="需求之前负责处理客户端错误日志处理工作，对结果进行汇总报表并做一下可视化展示。常规日志处理流程：客户端通过打点接口将原始日志提交到前端机上,然后日志收集agent将日志集中到中心节点，中心节点将日志输出到消息队列中，然后各种数据统计，数据分析程序从消息队列直接消费处理,并持久化存储。如图所示(图示不涉及一些负载均衡，HA方案):
+client1     \
+             (api) S">
+<meta property="og:type" content="article">
+<meta property="og:title" content="EK实时日志分析">
+<meta property="og:url" content="http://yoursite.com/2016/08/27/EK实时日志分析/index.html">
+<meta property="og:site_name" content="爱生活爱编码">
+<meta property="og:description" content="需求之前负责处理客户端错误日志处理工作，对结果进行汇总报表并做一下可视化展示。常规日志处理流程：客户端通过打点接口将原始日志提交到前端机上,然后日志收集agent将日志集中到中心节点，中心节点将日志输出到消息队列中，然后各种数据统计，数据分析程序从消息队列直接消费处理,并持久化存储。如图所示(图示不涉及一些负载均衡，HA方案):
+client1     \
+             (api) S">
+<meta property="og:image" content="http://oc1d7itlt.bkt.clouddn.com/Discover.png =600x300">
+<meta property="og:image" content="http://oc1d7itlt.bkt.clouddn.com/Visualize.png =600x300">
+<meta property="og:image" content="http://oc1d7itlt.bkt.clouddn.com/EK.png =600x300">
+<meta property="og:updated_time" content="2016-08-27T04:40:10.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="EK实时日志分析">
+<meta name="twitter:description" content="需求之前负责处理客户端错误日志处理工作，对结果进行汇总报表并做一下可视化展示。常规日志处理流程：客户端通过打点接口将原始日志提交到前端机上,然后日志收集agent将日志集中到中心节点，中心节点将日志输出到消息队列中，然后各种数据统计，数据分析程序从消息队列直接消费处理,并持久化存储。如图所示(图示不涉及一些负载均衡，HA方案):
+client1     \
+             (api) S">
+<meta name="twitter:image" content="http://oc1d7itlt.bkt.clouddn.com/Discover.png =600x300">
+  
+  
+    <link rel="icon" href="//favicon.icon">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img src="/img/tx.jpg" class="js-avatar" style="width: 100%;height: 100%;opacity: 1;">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">JinTao Song</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>Menu</li>
+						<li>Tags</li>
+						
+						<li>Links</li>
+						
+						
+						<li>About</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="http://github.com/oscersong007" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/u/3145882980" title="weibo">weibo</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/ES/" style="font-size: 10px;">ES</a> <a href="/tags/golang/" style="font-size: 10px;">golang</a> <a href="/tags/php/" style="font-size: 10px;">php</a> <a href="/tags/技术/" style="font-size: 10px;">技术</a> <a href="/tags/接口优化/" style="font-size: 10px;">接口优化</a> <a href="/tags/日志/" style="font-size: 10px;">日志</a> <a href="/tags/监控/" style="font-size: 10px;">监控</a> <a href="/tags/读书/" style="font-size: 10px;">读书</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://blog.163.com/sjt_linux/">我的网易</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">做一个幸福的人，读书 跑步 健身，努力工作，保持健康的身体和好的心情，做最好的自己。</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">JinTao Song</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				
+					<img src="/img/tx.jpg" class="js-avatar" style="width: 100%;height: 100%;opacity: 1;">
+				
+			</div>
+			<hgroup>
+			  <h1 class="header-author">JinTao Song</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="http://github.com/oscersong007" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/u/3145882980" title="weibo">weibo</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-EK实时日志分析" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/08/27/EK实时日志分析/" class="article-date">
+  	<time datetime="2016-08-27T04:11:42.000Z" itemprop="datePublished">2016-08-27</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      EK实时日志分析
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ES/">ES</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/日志/">日志</a></li></ul>
+	</div>
+
+        
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/技术/">技术</a>
+	</div>
+
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h3><pre><code>之前负责处理客户端错误日志处理工作，对结果进行汇总报表并做一下可视化展示。常规日志处理流程：客户端通过打点接口将原始日志提交到前端机上,然后日志收集agent将日志集中到中心节点，中心节点将日志输出到消息队列中，然后各种数据统计，数据分析程序从消息队列直接消费处理,并持久化存储。如图所示(图示不涉及一些负载均衡，HA方案):
+client1     \
+             (api) Server1 ( log collect agent1)     \                                                      HDFS
+client2    /                                         \                                            /
+                                         (log collect center) -&gt; MQ  -&gt; Mysql -&gt;日志处理，数据分析
+client3    \                                       /                                              \
+            (api) Server1 ( log collect agent2)   /                                                       .........
+client4    /
+我们选择将原始日志消费到mysql做持久化，也是通过mysql分析数据。将原始日志解析，不必要信息去重，将重要的字段直接mysql存储并对其索引。通过group by聚合数据，并同时Echarts对其可视化展示。刚开始速度还可以。日志每天增加2G，过了一段时间，运营反映页面卡死了，发现不能实时聚合数据，便使用redis对其缓存，使用脚本定期刷新缓存(目前日志180G)。(大量group by导致mysql 出现多个Sending data,影响同库表的查询,故对错误日志相关做了一次迁库).
+
+通过mysql分析日志方案不足：
+      1.实时性：数据量大时，不能实时汇总
+      2.扩展性：当需要对一个维度汇总时，又是加索引，改程序，改页面
+</code></pre><h3 id="引入ELK"><a href="#引入ELK" class="headerlink" title="引入ELK"></a>引入ELK</h3><pre><code>这里便引入了EK,说到EK,就是大家说的没有logstash的ELK! ELK stack包括如下:
+
+ ElasticSearch:  搜索引擎。能够达到实时搜索，稳定，可靠，快速，安装使用方便。支持通过HTTP使用JSON进行数据索引。
+
+ Logstash: 对应用程序日志进行收集管理，提供 Web 接口用于查询和统计。日志收集使用flume,scribe
+
+ Kibana: 基于Elasticsearch的数据可视化组件，超强的数据可视化能力是众多公司选择ELK stack的重要原因
+</code></pre><h3 id="使用组合"><a href="#使用组合" class="headerlink" title="使用组合"></a>使用组合</h3><pre><code>1. elasticsearch
+
+2. elasticsearch + kibana
+
+3. logstash
+
+4. elasticsearch + logstash + kibana
+</code></pre><h3 id="ES实践"><a href="#ES实践" class="headerlink" title="ES实践"></a>ES实践</h3><p>   结合现有环境日志收集这些我们已经有解决方案，直接使用组合2:EK分析数据即可：</p>
+<pre><code>1.使用elasticsearch索引数据
+
+2.kibana负责可视化展示
+</code></pre><p>一：ElasticSearch关键部分</p>
+<pre><code>1.与关系型数据库对比：
+
+            Index                &lt;---&gt;   Database
+            Mapping              &lt;---&gt;   Schema
+            Index.Type           &lt;---&gt;   Table
+            Document             &lt;---&gt;   Table.Row
+            Document.Field       &lt;---&gt;   Table.Column
+
+2.基于json,快速索引文档,(开发者要做的只是插入数据,检索数据)
+
+        导入数据示例:
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">$baseUri = &apos;http://XX.XX.XX.XX:9200&apos; . &apos;/&apos;.self::ES_INDEX.&apos;/&apos;.self::ES_TYPE.&apos;/&apos; . $fields[&apos;id&apos;];</div><div class="line">$ci = curl_init();</div><div class="line">curl_setopt($ci, CURLOPT_URL, $baseUri);</div><div class="line">curl_setopt($ci, CURLOPT_TIMEOUT, 200);</div><div class="line">curl_setopt($ci, CURLOPT_RETURNTRANSFER, 1);</div><div class="line">curl_setopt($ci, CURLOPT_FORBID_REUSE, 0);</div><div class="line">curl_setopt($ci, CURLOPT_CUSTOMREQUEST, &apos;PUT&apos;);</div><div class="line">curl_setopt($ci, CURLOPT_POSTFIELDS, json_encode($fields));</div><div class="line">$response = curl_exec($ci);</div><div class="line">curl_close($ci);</div></pre></td></tr></table></figure>
+<pre><code>3.聚合支持
+
+         Metrics Aggregations
+
+              min, max, avg,stats, extended_stats,  value_count
+
+         Bucket Aggregations
+
+              term,range, date_range,ipv4_range,histogram, date_histogram
+
+      聚合示例：
+
+
+ 4.bulk批量操作
+
+  之前以为es bulk操作直接将操作的放到二维数组json即可，结果不行，网上查了一下需要在每个json后添加&quot;\n&quot;
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">private function fmtBulkData($bulkItem) &#123;</div><div class="line">$bulkData = &apos;&apos;;</div><div class="line">foreach ( $bulkItem as $item) &#123;</div><div class="line">$bulkData .= json_encode(array(</div><div class="line">&apos;delete&apos; =&gt; array(</div><div class="line">&apos;_index&apos; =&gt; self::ES_INDEX,</div><div class="line">&apos;_type&apos; =&gt; self::ES_TYPE,</div><div class="line">&apos;_id&apos; =&gt; $item,</div><div class="line">),</div><div class="line">)) . &quot;\n&quot;;</div><div class="line">&#125;</div><div class="line">return $bulkData;</div><div class="line">&#125;</div><div class="line"></div><div class="line">private function doDelBulk($bulkData) &#123;</div><div class="line">$baseUri = &apos;http://XX.XX.XX.XX:9200&apos; . &apos;/_bulk&apos;;</div><div class="line">$ci = curl_init();</div><div class="line">curl_setopt($ci, CURLOPT_URL, $baseUri);</div><div class="line">curl_setopt($ci, CURLOPT_TIMEOUT, 200);</div><div class="line">curl_setopt($ci, CURLOPT_RETURNTRANSFER, 1);</div><div class="line">curl_setopt($ci, CURLOPT_FORBID_REUSE, 0);</div><div class="line">curl_setopt($ci, CURLOPT_CUSTOMREQUEST, &apos;POST&apos;);</div><div class="line">curl_setopt($ci, CURLOPT_POSTFIELDS, $bulkData);</div><div class="line">$response = curl_exec($ci);</div><div class="line">curl_close($ci);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>注意: 在一个index中,若一个field被自动映射成一种类型,之后就不能导入其他类型的数据。</p>
+<h3 id="Kibana功能介绍"><a href="#Kibana功能介绍" class="headerlink" title="Kibana功能介绍:"></a>Kibana功能介绍:</h3><p>   1.Discover 提供对其连接的elasticsearch中的index的检索支持(关键字过滤,index选择,过滤条件保存等等)<br>    <img src="http://oc1d7itlt.bkt.clouddn.com/Discover.png =600x300" alt="discover"></p>
+<p>   2.Visualize:提供对索引数据聚合处理,并提供扇形图，条形图等等多种展示<br>    <img src="http://oc1d7itlt.bkt.clouddn.com/Visualize.png =600x300" alt="visualize"></p>
+<p>   3.Dashboard：对建立的Visualize模块化管理(可以在Setting中导出或导入)<br>    <img src="http://oc1d7itlt.bkt.clouddn.com/EK.png =600x300" alt="dashboard"></p>
+<p>   4.Setting：关联elasticsearch中的索引,以及对 Discover,Visualize,Dashboard的管理设置功能</p>
+<p>#####使用EK分析日志解决了实时性，可扩展性！以后多一个维度就一个Visualize即可！</p>
+<h5 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h5><pre><code>http://es.xiaoleilu.com/030_Data/55_Bulk.html
+http://kibana.logstash.es/content/kibana/v4/discover.html
+</code></pre>
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/08/26/telegraf插件化实现/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">telegraf插件化实现</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">Share to: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="EK实时日志分析" data-title="EK实时日志分析" data-url="http://yoursite.com/2016/08/27/EK实时日志分析/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"oscersong007"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 JinTao Song
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: false,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false,
+		root: /
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

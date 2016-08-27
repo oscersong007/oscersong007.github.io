@@ -75,7 +75,7 @@
 						<li>Links</li>
 						
 						
-						<li>Über</li>
+						<li>About</li>
 						
 					</ul>
 				</div>
@@ -108,7 +108,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/golang/" style="font-size: 10px;">golang</a> <a href="/tags/php/" style="font-size: 10px;">php</a> <a href="/tags/技术/" style="font-size: 10px;">技术</a> <a href="/tags/接口优化/" style="font-size: 10px;">接口优化</a> <a href="/tags/监控/" style="font-size: 10px;">监控</a> <a href="/tags/读书/" style="font-size: 10px;">读书</a>
+						<a href="/tags/ES/" style="font-size: 10px;">ES</a> <a href="/tags/golang/" style="font-size: 10px;">golang</a> <a href="/tags/php/" style="font-size: 10px;">php</a> <a href="/tags/技术/" style="font-size: 10px;">技术</a> <a href="/tags/接口优化/" style="font-size: 10px;">接口优化</a> <a href="/tags/日志/" style="font-size: 10px;">日志</a> <a href="/tags/监控/" style="font-size: 10px;">监控</a> <a href="/tags/读书/" style="font-size: 10px;">读书</a>
 					</div>
 				</section>
 				
@@ -177,6 +177,135 @@
 </nav>
 
       <div class="body-wrap">
+  
+    <article id="post-EK实时日志分析" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/08/27/EK实时日志分析/" class="article-date">
+  	<time datetime="2016-08-27T04:11:42.000Z" itemprop="datePublished">2016-08-27</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/27/EK实时日志分析/">EK实时日志分析</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h3><pre><code>之前负责处理客户端错误日志处理工作，对结果进行汇总报表并做一下可视化展示。常规日志处理流程：客户端通过打点接口将原始日志提交到前端机上,然后日志收集agent将日志集中到中心节点，中心节点将日志输出到消息队列中，然后各种数据统计，数据分析程序从消息队列直接消费处理,并持久化存储。如图所示(图示不涉及一些负载均衡，HA方案):
+client1     \
+             (api) Server1 ( log collect agent1)     \                                                      HDFS
+client2    /                                         \                                            /
+                                         (log collect center) -&gt; MQ  -&gt; Mysql -&gt;日志处理，数据分析
+client3    \                                       /                                              \
+            (api) Server1 ( log collect agent2)   /                                                       .........
+client4    /
+我们选择将原始日志消费到mysql做持久化，也是通过mysql分析数据。将原始日志解析，不必要信息去重，将重要的字段直接mysql存储并对其索引。通过group by聚合数据，并同时Echarts对其可视化展示。刚开始速度还可以。日志每天增加2G，过了一段时间，运营反映页面卡死了，发现不能实时聚合数据，便使用redis对其缓存，使用脚本定期刷新缓存(目前日志180G)。(大量group by导致mysql 出现多个Sending data,影响同库表的查询,故对错误日志相关做了一次迁库).
+
+通过mysql分析日志方案不足：
+      1.实时性：数据量大时，不能实时汇总
+      2.扩展性：当需要对一个维度汇总时，又是加索引，改程序，改页面
+</code></pre><h3 id="引入ELK"><a href="#引入ELK" class="headerlink" title="引入ELK"></a>引入ELK</h3><pre><code>这里便引入了EK,说到EK,就是大家说的没有logstash的ELK! ELK stack包括如下:
+
+ ElasticSearch:  搜索引擎。能够达到实时搜索，稳定，可靠，快速，安装使用方便。支持通过HTTP使用JSON进行数据索引。
+
+ Logstash: 对应用程序日志进行收集管理，提供 Web 接口用于查询和统计。日志收集使用flume,scribe
+
+ Kibana: 基于Elasticsearch的数据可视化组件，超强的数据可视化能力是众多公司选择ELK stack的重要原因
+</code></pre><h3 id="使用组合"><a href="#使用组合" class="headerlink" title="使用组合"></a>使用组合</h3><pre><code>1. elasticsearch
+
+2. elasticsearch + kibana
+
+3. logstash
+
+4. elasticsearch + logstash + kibana
+</code></pre><h3 id="ES实践"><a href="#ES实践" class="headerlink" title="ES实践"></a>ES实践</h3><p>   结合现有环境日志收集这些我们已经有解决方案，直接使用组合2:EK分析数据即可：</p>
+<pre><code>1.使用elasticsearch索引数据
+
+2.kibana负责可视化展示
+</code></pre><p>一：ElasticSearch关键部分</p>
+<pre><code>1.与关系型数据库对比：
+
+            Index                &lt;---&gt;   Database
+            Mapping              &lt;---&gt;   Schema
+            Index.Type           &lt;---&gt;   Table
+            Document             &lt;---&gt;   Table.Row
+            Document.Field       &lt;---&gt;   Table.Column
+
+2.基于json,快速索引文档,(开发者要做的只是插入数据,检索数据)
+
+        导入数据示例:
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">$baseUri = &apos;http://XX.XX.XX.XX:9200&apos; . &apos;/&apos;.self::ES_INDEX.&apos;/&apos;.self::ES_TYPE.&apos;/&apos; . $fields[&apos;id&apos;];</div><div class="line">$ci = curl_init();</div><div class="line">curl_setopt($ci, CURLOPT_URL, $baseUri);</div><div class="line">curl_setopt($ci, CURLOPT_TIMEOUT, 200);</div><div class="line">curl_setopt($ci, CURLOPT_RETURNTRANSFER, 1);</div><div class="line">curl_setopt($ci, CURLOPT_FORBID_REUSE, 0);</div><div class="line">curl_setopt($ci, CURLOPT_CUSTOMREQUEST, &apos;PUT&apos;);</div><div class="line">curl_setopt($ci, CURLOPT_POSTFIELDS, json_encode($fields));</div><div class="line">$response = curl_exec($ci);</div><div class="line">curl_close($ci);</div></pre></td></tr></table></figure>
+<pre><code>3.聚合支持
+
+         Metrics Aggregations
+
+              min, max, avg,stats, extended_stats,  value_count
+
+         Bucket Aggregations
+
+              term,range, date_range,ipv4_range,histogram, date_histogram
+
+      聚合示例：
+
+
+ 4.bulk批量操作
+
+  之前以为es bulk操作直接将操作的放到二维数组json即可，结果不行，网上查了一下需要在每个json后添加&quot;\n&quot;
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">private function fmtBulkData($bulkItem) &#123;</div><div class="line">$bulkData = &apos;&apos;;</div><div class="line">foreach ( $bulkItem as $item) &#123;</div><div class="line">$bulkData .= json_encode(array(</div><div class="line">&apos;delete&apos; =&gt; array(</div><div class="line">&apos;_index&apos; =&gt; self::ES_INDEX,</div><div class="line">&apos;_type&apos; =&gt; self::ES_TYPE,</div><div class="line">&apos;_id&apos; =&gt; $item,</div><div class="line">),</div><div class="line">)) . &quot;\n&quot;;</div><div class="line">&#125;</div><div class="line">return $bulkData;</div><div class="line">&#125;</div><div class="line"></div><div class="line">private function doDelBulk($bulkData) &#123;</div><div class="line">$baseUri = &apos;http://XX.XX.XX.XX:9200&apos; . &apos;/_bulk&apos;;</div><div class="line">$ci = curl_init();</div><div class="line">curl_setopt($ci, CURLOPT_URL, $baseUri);</div><div class="line">curl_setopt($ci, CURLOPT_TIMEOUT, 200);</div><div class="line">curl_setopt($ci, CURLOPT_RETURNTRANSFER, 1);</div><div class="line">curl_setopt($ci, CURLOPT_FORBID_REUSE, 0);</div><div class="line">curl_setopt($ci, CURLOPT_CUSTOMREQUEST, &apos;POST&apos;);</div><div class="line">curl_setopt($ci, CURLOPT_POSTFIELDS, $bulkData);</div><div class="line">$response = curl_exec($ci);</div><div class="line">curl_close($ci);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>注意: 在一个index中,若一个field被自动映射成一种类型,之后就不能导入其他类型的数据。</p>
+<h3 id="Kibana功能介绍"><a href="#Kibana功能介绍" class="headerlink" title="Kibana功能介绍:"></a>Kibana功能介绍:</h3><p>   1.Discover 提供对其连接的elasticsearch中的index的检索支持(关键字过滤,index选择,过滤条件保存等等)<br>    <img src="http://oc1d7itlt.bkt.clouddn.com/Discover.png =600x300" alt="discover"></p>
+<p>   2.Visualize:提供对索引数据聚合处理,并提供扇形图，条形图等等多种展示<br>    <img src="http://oc1d7itlt.bkt.clouddn.com/Visualize.png =600x300" alt="visualize"></p>
+<p>   3.Dashboard：对建立的Visualize模块化管理(可以在Setting中导出或导入)<br>    <img src="http://oc1d7itlt.bkt.clouddn.com/EK.png =600x300" alt="dashboard"></p>
+<p>   4.Setting：关联elasticsearch中的索引,以及对 Discover,Visualize,Dashboard的管理设置功能</p>
+<p>#####使用EK分析日志解决了实时性，可扩展性！以后多一个维度就一个Visualize即可！</p>
+<h5 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h5><pre><code>http://es.xiaoleilu.com/030_Data/55_Bulk.html
+http://kibana.logstash.es/content/kibana/v4/discover.html
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ES/">ES</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/日志/">日志</a></li></ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/技术/">技术</a>
+	</div>
+
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
   
     <article id="post-telegraf插件化实现" class="article article-type-post" itemscope itemprop="blogPost">
   
