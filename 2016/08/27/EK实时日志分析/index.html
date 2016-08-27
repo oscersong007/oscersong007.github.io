@@ -16,16 +16,16 @@ client1     \
 <meta property="og:description" content="需求之前负责处理客户端错误日志处理工作，对结果进行汇总报表并做一下可视化展示。常规日志处理流程：客户端通过打点接口将原始日志提交到前端机上,然后日志收集agent将日志集中到中心节点，中心节点将日志输出到消息队列中，然后各种数据统计，数据分析程序从消息队列直接消费处理,并持久化存储。如图所示(图示不涉及一些负载均衡，HA方案):
 client1     \
              (api) S">
-<meta property="og:image" content="http://oc1d7itlt.bkt.clouddn.com/Discover.png?imageView2/2/w/600/h/300/interlace/0/q/100/">
-<meta property="og:image" content="http://oc1d7itlt.bkt.clouddn.com/Visualize.png?imageView2/2/w/600/h/300/interlace/0/q/100/">
-<meta property="og:image" content="http://oc1d7itlt.bkt.clouddn.com/EK.png?imageView2/2/w/600/h/300/interlace/0/q/100/">
-<meta property="og:updated_time" content="2016-08-27T04:56:27.000Z">
+<meta property="og:image" content="http://oc1d7itlt.bkt.clouddn.com/Discover.png?imageView2/2/w/600/h/300/interlace/0/q/100|watermark/2/text/b3NjZXJzb25nMDA3/font/5a6L5L2T/fontsize/500/fill/I0VGRUZFRg==/dissolve/53/gravity/SouthEast/dx/10/dy/10">
+<meta property="og:image" content="http://oc1d7itlt.bkt.clouddn.com/Visualize.png?imageView2/2/w/600/h/300/interlace/0/q/100|watermark/2/text/b3NjZXJzb25nMDA3/font/5a6L5L2T/fontsize/500/fill/I0VGRUZFRg==/dissolve/53/gravity/SouthEast/dx/10/dy/10">
+<meta property="og:image" content="http://oc1d7itlt.bkt.clouddn.com/EK.png?imageView2/2/w/600/h/300/interlace/0/q/100|watermark/2/text/b3NjZXJzb25nMDA3/font/5a6L5L2T/fontsize/500/fill/I0VGRUZFRg==/dissolve/53/gravity/SouthEast/dx/10/dy/10">
+<meta property="og:updated_time" content="2016-08-27T05:01:29.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="EK实时日志分析">
 <meta name="twitter:description" content="需求之前负责处理客户端错误日志处理工作，对结果进行汇总报表并做一下可视化展示。常规日志处理流程：客户端通过打点接口将原始日志提交到前端机上,然后日志收集agent将日志集中到中心节点，中心节点将日志输出到消息队列中，然后各种数据统计，数据分析程序从消息队列直接消费处理,并持久化存储。如图所示(图示不涉及一些负载均衡，HA方案):
 client1     \
              (api) S">
-<meta name="twitter:image" content="http://oc1d7itlt.bkt.clouddn.com/Discover.png?imageView2/2/w/600/h/300/interlace/0/q/100/">
+<meta name="twitter:image" content="http://oc1d7itlt.bkt.clouddn.com/Discover.png?imageView2/2/w/600/h/300/interlace/0/q/100|watermark/2/text/b3NjZXJzb25nMDA3/font/5a6L5L2T/fontsize/500/fill/I0VGRUZFRg==/dissolve/53/gravity/SouthEast/dx/10/dy/10">
   
   
     <link rel="icon" href="//favicon.icon">
@@ -86,7 +86,7 @@ client1     \
 						<li>Links</li>
 						
 						
-						<li>Über</li>
+						<li>About</li>
 						
 					</ul>
 				</div>
@@ -290,9 +290,9 @@ client4    /
   之前以为es bulk操作直接将操作的放到二维数组json即可，结果不行，网上查了一下需要在每个json后添加&quot;\n&quot;
 </code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">private function fmtBulkData($bulkItem) &#123;</div><div class="line">$bulkData = &apos;&apos;;</div><div class="line">foreach ( $bulkItem as $item) &#123;</div><div class="line">$bulkData .= json_encode(array(</div><div class="line">&apos;delete&apos; =&gt; array(</div><div class="line">&apos;_index&apos; =&gt; self::ES_INDEX,</div><div class="line">&apos;_type&apos; =&gt; self::ES_TYPE,</div><div class="line">&apos;_id&apos; =&gt; $item,</div><div class="line">),</div><div class="line">)) . &quot;\n&quot;;</div><div class="line">&#125;</div><div class="line">return $bulkData;</div><div class="line">&#125;</div><div class="line"></div><div class="line">private function doDelBulk($bulkData) &#123;</div><div class="line">$baseUri = &apos;http://XX.XX.XX.XX:9200&apos; . &apos;/_bulk&apos;;</div><div class="line">$ci = curl_init();</div><div class="line">curl_setopt($ci, CURLOPT_URL, $baseUri);</div><div class="line">curl_setopt($ci, CURLOPT_TIMEOUT, 200);</div><div class="line">curl_setopt($ci, CURLOPT_RETURNTRANSFER, 1);</div><div class="line">curl_setopt($ci, CURLOPT_FORBID_REUSE, 0);</div><div class="line">curl_setopt($ci, CURLOPT_CUSTOMREQUEST, &apos;POST&apos;);</div><div class="line">curl_setopt($ci, CURLOPT_POSTFIELDS, $bulkData);</div><div class="line">$response = curl_exec($ci);</div><div class="line">curl_close($ci);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>注意: 在一个index中,若一个field被自动映射成一种类型,之后就不能导入其他类型的数据。</p>
-<h3 id="Kibana功能介绍"><a href="#Kibana功能介绍" class="headerlink" title="Kibana功能介绍:"></a>Kibana功能介绍:</h3><p>   1.Discover 提供对其连接的elasticsearch中的index的检索支持(关键字过滤,index选择,过滤条件保存等等)<br>    <img src="http://oc1d7itlt.bkt.clouddn.com/Discover.png?imageView2/2/w/600/h/300/interlace/0/q/100/" alt="discover"></p>
-<p>   2.Visualize:提供对索引数据聚合处理,并提供扇形图，条形图等等多种展示<br>    <img src="http://oc1d7itlt.bkt.clouddn.com/Visualize.png?imageView2/2/w/600/h/300/interlace/0/q/100/" alt="visualize"></p>
-<p>   3.Dashboard：对建立的Visualize模块化管理(可以在Setting中导出或导入)<br>    <img src="http://oc1d7itlt.bkt.clouddn.com/EK.png?imageView2/2/w/600/h/300/interlace/0/q/100/" alt="dashboard"></p>
+<h3 id="Kibana功能介绍"><a href="#Kibana功能介绍" class="headerlink" title="Kibana功能介绍:"></a>Kibana功能介绍:</h3><p>   1.Discover 提供对其连接的elasticsearch中的index的检索支持(关键字过滤,index选择,过滤条件保存等等)<br>    <img src="http://oc1d7itlt.bkt.clouddn.com/Discover.png?imageView2/2/w/600/h/300/interlace/0/q/100|watermark/2/text/b3NjZXJzb25nMDA3/font/5a6L5L2T/fontsize/500/fill/I0VGRUZFRg==/dissolve/53/gravity/SouthEast/dx/10/dy/10" alt="discover"></p>
+<p>   2.Visualize:提供对索引数据聚合处理,并提供扇形图，条形图等等多种展示<br>    <img src="http://oc1d7itlt.bkt.clouddn.com/Visualize.png?imageView2/2/w/600/h/300/interlace/0/q/100|watermark/2/text/b3NjZXJzb25nMDA3/font/5a6L5L2T/fontsize/500/fill/I0VGRUZFRg==/dissolve/53/gravity/SouthEast/dx/10/dy/10" alt="visualize"></p>
+<p>   3.Dashboard：对建立的Visualize模块化管理(可以在Setting中导出或导入)<br>    <img src="http://oc1d7itlt.bkt.clouddn.com/EK.png?imageView2/2/w/600/h/300/interlace/0/q/100|watermark/2/text/b3NjZXJzb25nMDA3/font/5a6L5L2T/fontsize/500/fill/I0VGRUZFRg==/dissolve/53/gravity/SouthEast/dx/10/dy/10" alt="dashboard"></p>
 <p>   4.Setting：关联elasticsearch中的索引,以及对 Discover,Visualize,Dashboard的管理设置功能</p>
 <p>#####使用EK分析日志解决了实时性，可扩展性！以后多一个维度就一个Visualize即可！</p>
 <h5 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h5><pre><code>http://es.xiaoleilu.com/030_Data/55_Bulk.html
