@@ -683,7 +683,7 @@ a {
   left: 0;
 }
 #header .switch-part2 {
-  /* left: 100%; */
+   left: 100%; 
   top: 20px;
   overlay-x: hidden;
   overflow-y: auto;
@@ -1127,7 +1127,7 @@ a {
 }
 .article-more-link a {
   background: #4d4d4d;
-  color: #fff;
+ /*  color: #fff; */
   font-size: 12px;
   padding: 2px 8px 4px;
   line-height: 16px;
@@ -2017,7 +2017,7 @@ pre .css ~ * .id {
   text-decoration: none;
   font-weight: normal;
   font-size: 10px;
-  color: #fff;
+ /*  color: #fff; */
   height: 18px;
   line-height: 18px;
   float: left;
