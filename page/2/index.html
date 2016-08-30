@@ -75,7 +75,7 @@
 						<li>Links</li>
 						
 						
-						<li>Über</li>
+						<li>About</li>
 						
 					</ul>
 				</div>
@@ -108,7 +108,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/ES/" style="font-size: 10px;">ES</a> <a href="/tags/golang/" style="font-size: 20px;">golang</a> <a href="/tags/php/" style="font-size: 10px;">php</a> <a href="/tags/异步/" style="font-size: 10px;">异步</a> <a href="/tags/技术/" style="font-size: 10px;">技术</a> <a href="/tags/接口优化/" style="font-size: 10px;">接口优化</a> <a href="/tags/日志/" style="font-size: 10px;">日志</a> <a href="/tags/监控/" style="font-size: 20px;">监控</a> <a href="/tags/读书/" style="font-size: 10px;">读书</a>
+						<a href="/tags/ES/" style="font-size: 10px;">ES</a> <a href="/tags/golang/" style="font-size: 20px;">golang</a> <a href="/tags/php/" style="font-size: 20px;">php</a> <a href="/tags/异步/" style="font-size: 10px;">异步</a> <a href="/tags/技术/" style="font-size: 10px;">技术</a> <a href="/tags/接口优化/" style="font-size: 10px;">接口优化</a> <a href="/tags/日志/" style="font-size: 10px;">日志</a> <a href="/tags/监控/" style="font-size: 20px;">监控</a> <a href="/tags/读书/" style="font-size: 10px;">读书</a>
 					</div>
 				</section>
 				
@@ -177,6 +177,82 @@
 </nav>
 
       <div class="body-wrap">
+  
+    <article id="post-php接口优化-合并请求" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/08/24/php接口优化-合并请求/" class="article-date">
+  	<time datetime="2016-08-24T13:51:03.000Z" itemprop="datePublished">2016-08-24</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/24/php接口优化-合并请求/">php接口优化:合并请求</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-客户端与服务端之间协商"><a href="#1-客户端与服务端之间协商" class="headerlink" title="1.客户端与服务端之间协商"></a>1.客户端与服务端之间协商</h3><pre><code> 在应用开发中，服务端与客户端完成功能的同时也得注意应用性能，用户体验。记得在我刚进部门的时候接手一个内部应用的接口开发工作。就一个App首页，客户端不停的要求各部分的接口，我也是一个一个的快速响应。最后发现应用越来越不如意了。还准备加缓存呢。leader当时帮忙抓包分析，一眼看出问题所在。接口太多了，一个首页先拿到一个接口的数据再根据里面的数据请求下一个接口，直到所有准备就绪，客户端才正常展示。😓 后来和客户端一起协商合并了一些接口处理,App就ok了.
+接口开发工作中应该与客户端协商好接口。具体是情况而定：
+    1.首页，分类页，App一键切换的页面进可能使用较少的接口提供数据(通过不同字段区分各组件所需的数据)
+    2.客户端有时请求的可能只是一个配置信息。但是却没有正确的请求时机。这个也可以考虑和别的接口进行合并处理
+</code></pre><h3 id="2-使用curl-multi请求第三方服务"><a href="#2-使用curl-multi请求第三方服务" class="headerlink" title="2.使用curl_multi请求第三方服务"></a>2.使用curl_multi请求第三方服务</h3><pre><code>今天看到同事接手的一个项目出问题了。上去一看，一个接口依赖7，8个接口。每步都是串行处理，更6的是还有一个foreach里面不知道有多少个curl访问。php-fpm不支持fork并发处理，在使用没有支持异步处理的框架的时候。我们可以使用curl_multi并发请求依赖服务。之前串行处理1s,可能现在只需要100ms就可以响应了。像下面直接传入多个url,得到Arr[url_key]=Response 的数组。自己合并就行。也可以适当加入重试
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">private function getMultiUrlContents($urls, $timeout = 1) &#123;</div><div class="line">    $mh = curl_multi_init();</div><div class="line">    $chArray = array();</div><div class="line">    foreach ($urls as $i =&gt; $url) &#123;</div><div class="line">        $chArray[$i] = curl_init($url);</div><div class="line">        curl_setopt($chArray[$i], CURLOPT_CONNECTTIMEOUT, $timeout);</div><div class="line">        curl_setopt($chArray[$i], CURLOPT_RETURNTRANSFER, true);</div><div class="line">        curl_multi_add_handle($mh, $chArray[$i]);</div><div class="line">    &#125;</div><div class="line">    do &#123;</div><div class="line">        curl_multi_exec($mh, $running);</div><div class="line">        curl_multi_select($mh);</div><div class="line">    &#125; while ($running &gt; 0);</div><div class="line">    $res = array();</div><div class="line">    foreach ($urls as $i =&gt; $url) &#123;</div><div class="line">        $res[$url] = curl_multi_getcontent($chArray[$i]);</div><div class="line">    &#125;</div><div class="line">    foreach ($urls as $i =&gt; $url) &#123;</div><div class="line">        curl_multi_remove_handle($mh, $chArray[$i]);</div><div class="line">    &#125;</div><div class="line">    curl_multi_close($mh);</div><div class="line">    return $res;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="3-使用redis管道"><a href="#3-使用redis管道" class="headerlink" title="3.使用redis管道"></a>3.使用redis管道</h3><pre><code>同样在请求redis的时候也可以使用管道合并请求。
+</code></pre><p>未合并前：请求数量由count($keys)决定</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">foreach ($keys as $v) &#123;</div><div class="line">    $all[$v] = $redis-&gt;hgetall($v);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>合并后：只有一个请求</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$redis-&gt;multi(Redis::PIPELINE);</div><div class="line">foreach ($keys as $v) &#123;</div><div class="line">    $redis-&gt;hgetall($v);</div><div class="line">&#125;</div><div class="line">$all = $redis-&gt;exec();</div></pre></td></tr></table></figure>
+<h3 id="4-尽量使用join"><a href="#4-尽量使用join" class="headerlink" title="4.尽量使用join"></a>4.尽量使用join</h3><pre><code>有时要同两个不同表里面获取关联数据。直接join就行
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">select B.id from A left join A on A.id=B.Aid;</div></pre></td></tr></table></figure>
+<p>并非下面的操作：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">list = select id from A;</div><div class="line">for id in list</div><div class="line">do</div><div class="line">	select id from b where Aid=id</div><div class="line">done</div></pre></td></tr></table></figure>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><pre><code>&gt; 接口开发中合并请求直接带来的是效率，响应速度。但是在实现上开发者必须多一下处理。像提到的第一点中不光在技术上处理，更在设计上多思考。 
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/php/">php</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/接口优化/">接口优化</a></li></ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/php/">php</a>
+	</div>
+
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
   
     <article id="post-《高扩展性网站的50条原则》读书笔记" class="article article-type-post" itemscope itemprop="blogPost">
   
