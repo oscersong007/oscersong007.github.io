@@ -4,57 +4,36 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>《高扩展性网站的50条原则》读书笔记 | 爱生活爱编码</title>
+  <title>nginx日志实时分析 | 爱生活爱编码</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="一.化简方程1.不要过度设计
-2.设计时就考虑扩展性
-3.把方案一简再简
-4.减少dns查找
-5.尽可能减少对象
-6.使用同一品牌的网络设备
-二.分布工作7.横向复制(x轴原则)
-8.拆分不同的东西（y轴原则)  动词拆分操作，名词拆分资源
-9.拆分相近的东西 （数据切片)
-三.横向扩展设计10.设计横向扩展方案
-11.采用经济型系统
-12.横向扩展数据中心
-13.利用云计算进行设计
-四.使用正确">
+  <meta name="description" content="需求目的：实时监控web访问状态，准确定位线上故障。
+已有方案: 
+1.ELK stack : 采集数据到es中，es对每条日志索引存储。通过kibana多维度展示web
+            状态。但是若web站点日志比较多。随之监控系统本身存储也将增大。
+2.一些日志处理命令 : 可以直接查看当前访问情况，比较方便。但是无数据存储。无法查看
+            历史状态。
+方案自己解析l">
 <meta property="og:type" content="article">
-<meta property="og:title" content="《高扩展性网站的50条原则》读书笔记">
-<meta property="og:url" content="http://yoursite.com/2016/08/23/《高扩展性网站的50条原则》读书笔记/index.html">
+<meta property="og:title" content="nginx日志实时分析">
+<meta property="og:url" content="http://yoursite.com/2016/09/03/nginx日志实时分析/index.html">
 <meta property="og:site_name" content="爱生活爱编码">
-<meta property="og:description" content="一.化简方程1.不要过度设计
-2.设计时就考虑扩展性
-3.把方案一简再简
-4.减少dns查找
-5.尽可能减少对象
-6.使用同一品牌的网络设备
-二.分布工作7.横向复制(x轴原则)
-8.拆分不同的东西（y轴原则)  动词拆分操作，名词拆分资源
-9.拆分相近的东西 （数据切片)
-三.横向扩展设计10.设计横向扩展方案
-11.采用经济型系统
-12.横向扩展数据中心
-13.利用云计算进行设计
-四.使用正确">
-<meta property="og:updated_time" content="2016-08-23T15:36:25.000Z">
+<meta property="og:description" content="需求目的：实时监控web访问状态，准确定位线上故障。
+已有方案: 
+1.ELK stack : 采集数据到es中，es对每条日志索引存储。通过kibana多维度展示web
+            状态。但是若web站点日志比较多。随之监控系统本身存储也将增大。
+2.一些日志处理命令 : 可以直接查看当前访问情况，比较方便。但是无数据存储。无法查看
+            历史状态。
+方案自己解析l">
+<meta property="og:updated_time" content="2016-09-03T06:46:00.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="《高扩展性网站的50条原则》读书笔记">
-<meta name="twitter:description" content="一.化简方程1.不要过度设计
-2.设计时就考虑扩展性
-3.把方案一简再简
-4.减少dns查找
-5.尽可能减少对象
-6.使用同一品牌的网络设备
-二.分布工作7.横向复制(x轴原则)
-8.拆分不同的东西（y轴原则)  动词拆分操作，名词拆分资源
-9.拆分相近的东西 （数据切片)
-三.横向扩展设计10.设计横向扩展方案
-11.采用经济型系统
-12.横向扩展数据中心
-13.利用云计算进行设计
-四.使用正确">
+<meta name="twitter:title" content="nginx日志实时分析">
+<meta name="twitter:description" content="需求目的：实时监控web访问状态，准确定位线上故障。
+已有方案: 
+1.ELK stack : 采集数据到es中，es对每条日志索引存储。通过kibana多维度展示web
+            状态。但是若web站点日志比较多。随之监控系统本身存储也将增大。
+2.一些日志处理命令 : 可以直接查看当前访问情况，比较方便。但是无数据存储。无法查看
+            历史状态。
+方案自己解析l">
   
   
     <link rel="icon" href="//favicon.icon">
@@ -216,11 +195,11 @@
 	</div>
 </nav>
 
-      <div class="body-wrap"><article id="post-《高扩展性网站的50条原则》读书笔记" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-nginx日志实时分析" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/08/23/《高扩展性网站的50条原则》读书笔记/" class="article-date">
-  	<time datetime="2016-08-23T14:52:34.000Z" itemprop="datePublished">2016-08-23</time>
+      <a href="/2016/09/03/nginx日志实时分析/" class="article-date">
+  	<time datetime="2016-09-03T05:51:10.000Z" itemprop="datePublished">2016-09-03</time>
 </a>
     </div>
   
@@ -233,7 +212,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      《高扩展性网站的50条原则》读书笔记
+      nginx日志实时分析
     </h1>
   
 
@@ -242,12 +221,12 @@
       <div class="article-info article-info-post">
         
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/技术/">技术</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/读书/">读书</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/golang/">golang</a></li></ul>
 	</div>
 
         
 	<div class="article-category tagcloud">
-	<a class="article-category-link" href="/categories/读书笔记/">读书笔记</a>
+	<a class="article-category-link" href="/categories/日志/">日志</a>
 	</div>
 
 
@@ -257,57 +236,29 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="一-化简方程"><a href="#一-化简方程" class="headerlink" title="一.化简方程"></a>一.化简方程</h2><pre><code>1.不要过度设计
-2.设计时就考虑扩展性
-3.把方案一简再简
-4.减少dns查找
-5.尽可能减少对象
-6.使用同一品牌的网络设备
-</code></pre><h2 id="二-分布工作"><a href="#二-分布工作" class="headerlink" title="二.分布工作"></a>二.分布工作</h2><pre><code>7.横向复制(x轴原则)
-8.拆分不同的东西（y轴原则)  动词拆分操作，名词拆分资源
-9.拆分相近的东西 （数据切片)
-</code></pre><h2 id="三-横向扩展设计"><a href="#三-横向扩展设计" class="headerlink" title="三.横向扩展设计"></a>三.横向扩展设计</h2><pre><code>10.设计横向扩展方案
-11.采用经济型系统
-12.横向扩展数据中心
-13.利用云计算进行设计
-</code></pre><h2 id="四-使用正确的工具"><a href="#四-使用正确的工具" class="headerlink" title="四.使用正确的工具"></a>四.使用正确的工具</h2><pre><code>14.合理使用数据库
-15.防火墙，到处都是防火墙
-16.积极利用日志文件
-</code></pre><h2 id="五-不要重复工作"><a href="#五-不要重复工作" class="headerlink" title="五.不要重复工作"></a>五.不要重复工作</h2><pre><code>17.不要立即检查刚做过的工作
-18.停止重定向
-19.放松时序约束
-</code></pre><h2 id="六-积极使用缓存"><a href="#六-积极使用缓存" class="headerlink" title="六.积极使用缓存"></a>六.积极使用缓存</h2><pre><code>20.利用cdn
-21.使用过期头
-22.缓存ajax调用
-23.利用页面缓存
-24.利用应用缓存
-25.利用对象缓存
-26.把对象缓存到自己的层上
-</code></pre><h2 id="七-从错误中吸取教训"><a href="#七-从错误中吸取教训" class="headerlink" title="七.从错误中吸取教训"></a>七.从错误中吸取教训</h2><pre><code>27.积极地学习
-28.不要依靠qa发现失误
-29.没有回退功能的设计是失败的设计
-30.讨论失败并从中吸取教训
-</code></pre><h2 id="八-数据库原则"><a href="#八-数据库原则" class="headerlink" title="八.数据库原则"></a>八.数据库原则</h2><pre><code>31.注意代价高的关系
-32.使用类型正确的数据库锁
-33.不要使用多阶段提交
-34.不要使用select for update
-35.不要选择所有数据
-</code></pre><h2 id="九-容错设计与故障控制"><a href="#九-容错设计与故障控制" class="headerlink" title="九.容错设计与故障控制"></a>九.容错设计与故障控制</h2><pre><code>36.采取隔离故障的泳道
-37.绝对不要信任单点鼓掌
-38.避免系统串联
-39.确保能够启用禁用功能
-</code></pre><h2 id="十-避免或分发状态"><a href="#十-避免或分发状态" class="headerlink" title="十.避免或分发状态"></a>十.避免或分发状态</h2><pre><code>40.努力实现无状态
-41.尽量在浏览器端维护会话
-42.利用分布式缓存存放状态
-</code></pre><h2 id="十一-异步通信与总线"><a href="#十一-异步通信与总线" class="headerlink" title="十一.异步通信与总线"></a>十一.异步通信与总线</h2><pre><code>43.尽可能使用异步通信
-44.确保消息总线能够扩展
-45.避免消息总线过度拥挤
-</code></pre><h2 id="十二-其他原则"><a href="#十二-其他原则" class="headerlink" title="十二.其他原则"></a>十二.其他原则</h2><pre><code>46.慎用第三方解决方案扩展
-47.清除 归档 成本合理的存储
-48.删除事务处理中的商业智能
-49.设计能够监控的应用
-50.要能胜任
-</code></pre>
+        <h5 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h5><pre><code>目的：实时监控web访问状态，准确定位线上故障。
+已有方案: 
+1.ELK stack : 采集数据到es中，es对每条日志索引存储。通过kibana多维度展示web
+            状态。但是若web站点日志比较多。随之监控系统本身存储也将增大。
+2.一些日志处理命令 : 可以直接查看当前访问情况，比较方便。但是无数据存储。无法查看
+            历史状态。
+</code></pre><h5 id="方案"><a href="#方案" class="headerlink" title="方案"></a>方案</h5><pre><code>自己解析log实时解析。像ops监控server一样统一接口单位时间指标(访问量，错误数，
+后台处理时间，响应时间)。然后实时统一push到监控系统的存储。通过dashboard查看。
+type EMeta struct {
+    Recv      int    // 接受字节大小
+    Sent      int    // 发送字节大小
+    Inter     string    // api
+    Time      string    // 用于区分分钟时间
+    Status    int        // 状态码
+    ReqTime   float64    // 响应时间
+    UpReqTime float64    // 处理时间
+}
+</code></pre><h5 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h5><pre><code>1. nignx日志实时更新。需要一个tail功能
+2. 解析日志。 接口名称，响应时间，响应码等等。
+3. 单位时间内的统计，并求平均
+4. 上报监控系统
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">func (*Alog) Gather() error &#123;		// 处理入口</div><div class="line"></div><div class="line">	go TailLog()	// github.com/hpcloud/tail</div><div class="line">	/**</div><div class="line">		for &#123;</div><div class="line">		t, _ := tail.TailFile(LogPathOB, tail.Config&#123;Follow: true, Location: &amp;tail.SeekInfo&#123;Offset: 0, Whence: 2&#125;&#125;)		// 在一个for,防止日志切割</div><div class="line">		for line := range t.Lines &#123;</div><div class="line">			LineCh &lt;- line.Text				// 通过一个有缓冲的ch传输到日志解析协程</div><div class="line">		&#125;</div><div class="line">		fmt.Println(&quot;lf change!!!&quot;)</div><div class="line">		time.Sleep(10 * time.Second)</div><div class="line">	&#125;</div><div class="line">	**/</div><div class="line">	</div><div class="line">	go LogHandler()</div><div class="line">	/**</div><div class="line">		for &#123;</div><div class="line">			line := &lt;-LineCh</div><div class="line">			entity, _ := p.ParseString(line)	// 解析日志到entity结构</div><div class="line">			EntityCh &lt;- entity	// 进入HandlerEveryMin</div><div class="line">		&#125;</div><div class="line">	**/</div><div class="line">	</div><div class="line">	go HandlerEveryMin()</div><div class="line">	/**</div><div class="line">		分钟内数据进行汇总统计</div><div class="line">		通过channel传入 SummaryGRT</div><div class="line">	**/</div><div class="line">	</div><div class="line">	go SummaryGRT()</div><div class="line">	/**</div><div class="line">		sort()  // 根据访问量取出topN</div><div class="line">		push()	// 上报监控存储机</div><div class="line">	**/</div><div class="line">	</div><div class="line">	select &#123;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
       
     </div>
     
@@ -316,15 +267,11 @@
     
 <nav id="article-nav">
   
-    <a href="/2016/08/24/php接口优化-合并请求/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption"><</strong>
-      <div class="article-nav-title">
-        
-          php接口优化:合并请求
-        
-      </div>
-    </a>
   
+    <a href="/2016/08/31/图床域名挂了/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">图床域名挂了!</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
   
 </nav>
 
@@ -357,7 +304,7 @@
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="《高扩展性网站的50条原则》读书笔记" data-title="《高扩展性网站的50条原则》读书笔记" data-url="http://yoursite.com/2016/08/23/《高扩展性网站的50条原则》读书笔记/"></div>
+	<div class="ds-thread" data-thread-key="nginx日志实时分析" data-title="nginx日志实时分析" data-url="http://yoursite.com/2016/09/03/nginx日志实时分析/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
