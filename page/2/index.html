@@ -108,7 +108,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/ES/" style="font-size: 10px;">ES</a> <a href="/tags/cache/" style="font-size: 10px;">cache</a> <a href="/tags/golang/" style="font-size: 20px;">golang</a> <a href="/tags/php/" style="font-size: 15px;">php</a> <a href="/tags/异步/" style="font-size: 10px;">异步</a> <a href="/tags/技术/" style="font-size: 10px;">技术</a> <a href="/tags/接口优化/" style="font-size: 10px;">接口优化</a> <a href="/tags/日志/" style="font-size: 10px;">日志</a> <a href="/tags/监控/" style="font-size: 15px;">监控</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a> <a href="/tags/读书/" style="font-size: 10px;">读书</a>
+						<a href="/tags/ES/" style="font-size: 10px;">ES</a> <a href="/tags/cache/" style="font-size: 10px;">cache</a> <a href="/tags/golang/" style="font-size: 20px;">golang</a> <a href="/tags/php/" style="font-size: 15px;">php</a> <a href="/tags/异步/" style="font-size: 10px;">异步</a> <a href="/tags/技术/" style="font-size: 10px;">技术</a> <a href="/tags/接口优化/" style="font-size: 10px;">接口优化</a> <a href="/tags/日志/" style="font-size: 10px;">日志</a> <a href="/tags/监控/" style="font-size: 15px;">监控</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a> <a href="/tags/读书/" style="font-size: 15px;">读书</a>
 					</div>
 				</section>
 				
@@ -177,6 +177,141 @@
 </nav>
 
       <div class="body-wrap">
+  
+    <article id="post-golang构建异步处理队列" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/08/28/golang构建异步处理队列/" class="article-date">
+  	<time datetime="2016-08-28T05:01:34.000Z" itemprop="datePublished">2016-08-28</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/28/golang构建异步处理队列/">golang构建异步处理队列</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h5 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h5><pre><code>使用golang+redis完成同resque的异步处理队列。完成后台任务的异步调用
+主要功能: 
+   1. 异步调用任务
+   2. 队列状态查询
+</code></pre><h5 id="redis数据结构及操作方法"><a href="#redis数据结构及操作方法" class="headerlink" title="redis数据结构及操作方法"></a>redis数据结构及操作方法</h5><pre><code>1. 队列集合(固定大小的set) 默认有default队列 (不同业务不同队列)
+       数据:
+       queueName
+
+       操作方法:
+       add
+       del
+       list
+       isset
+
+2. 队列meta(可扩展的hash) (每个队列一个meta描述，记录优先级等信息)
+       数据:
+       priority 
+
+       操作方法:
+       set
+       get
+       del
+
+3. 任务队列
+    任务队列:(redis的queue)
+    操作方法:
+       push
+       pull
+       clear
+
+       状态数据记录:
+       len             --- 待处理
+       runnging        --- 运行中
+       finish          --- 已完成
+       error            --- 错误   ( 每个队列对应一个errorlog)
+</code></pre><h5 id="接入"><a href="#接入" class="headerlink" title="接入"></a>接入</h5><pre><code>1. 添加服务worker
+       同worker/log/log.go,实现Tasker接口,
+       并且通过init函数注册,
+       通过listservice验证是否注册成功
+2. 添加队列: addqueue, listqueue验证
+3. 往新添加的队列中push任务(post:json)
+        字段: Worker 对应添加的服务 
+             Params 服务所需所有参数,服务自己解析
+4. 每个队列会有一个日志/tmp/goqueue/queue.log.Ymd （方便debug）
+</code></pre><h5 id="实现难点"><a href="#实现难点" class="headerlink" title="实现难点"></a>实现难点</h5><pre><code>1.根据队列任务的不同worker调用对应方法(同telegraf插件实现)
+
+
+任务处理实现目录结构:
+worker/
+|-- all
+|   `-- all.go
+|-- log
+|   `-- log.go
+`-- worker.go
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line">worker.go 定义任务接口Tasker,并初始化全局map</div><div class="line">##########################</div><div class="line">package worker</div><div class="line"></div><div class="line">type Tasker interface &#123;</div><div class="line">// Worker method</div><div class="line">   Worker(string)</div><div class="line">&#125;</div><div class="line"></div><div class="line">type Creator func() Tasker</div><div class="line"></div><div class="line">var WKMap = map[string]Creator&#123;&#125;</div><div class="line"></div><div class="line">func Add(name string, creator Creator) &#123;</div><div class="line">	WKMap[name] = creator</div><div class="line">&#125;</div><div class="line">##########################</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">all.go 调用功能worker的初始化</div><div class="line">##########################</div><div class="line">package all</div><div class="line"></div><div class="line">import(</div><div class="line">     _ &quot;worker/log&quot;</div><div class="line">)</div><div class="line">##########################</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">log.go: 简单一个example</div><div class="line">##########################</div><div class="line">package log</div><div class="line"></div><div class="line">import (</div><div class="line">	w &quot;worker&quot;</div><div class="line">	&quot;logger&quot;</div><div class="line">)</div><div class="line"></div><div class="line">func init() &#123;</div><div class="line">	w.Add(&quot;log&quot;, func() w.Tasker &#123;</div><div class="line">		return &amp;Log&#123;&#125;</div><div class="line">	&#125;)</div><div class="line">&#125;</div><div class="line"></div><div class="line">type Log struct&#123;&#125;</div><div class="line"></div><div class="line">func (this *Log) Worker(params string) &#123;</div><div class="line">	logger.Infoln(params)</div><div class="line">&#125;</div><div class="line">##########################</div><div class="line"></div><div class="line"></div><div class="line">调用:</div><div class="line">##########################</div><div class="line">if f,ok := w.WKMap[m.Worker]; ok &#123;</div><div class="line">            w := f()</div><div class="line">            w.Worker(m.Params)</div><div class="line">&#125;</div><div class="line">##########################</div></pre></td></tr></table></figure>
+<pre><code>2. 队列任务过多时，不能无限制创建goroutine.必须控制goroutine数量
+#######
+type RunningTask struct {
+  Queue      string
+  Goroutines int            // 每个任务队列一个goroutine记录
+  GrtMux     sync.RWMutex
+  Shutdown   chan int
+}
+
+
+// 开启新的goroutine，先判断限制，OK的话GRT加1，否则等待
+if grt := this.GetGRTNum(); grt &lt; c.TASK_QUEUE_GRT_LIMIT {
+      go this.RunTask(stateCh)
+      this.ChangeGRTNum(true)
+}
+
+
+func (this *RunningTask) RunTask(stateCh chan *TaskStateCount) {
+  defer this.ChangeGRTNum(false)        // 每个任务结束  defer 对应的goroutine数量减1
+#######
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/golang/">golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/异步/">异步</a></li></ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/技术/">技术</a>
+	</div>
+
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
   
     <article id="post-对比tick与open-falcon" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -519,119 +654,9 @@ http://kibana.logstash.es/content/kibana/v4/discover.html
 
 
   
-    <article id="post-《高扩展性网站的50条原则》读书笔记" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/08/23/《高扩展性网站的50条原则》读书笔记/" class="article-date">
-  	<time datetime="2016-08-23T14:52:34.000Z" itemprop="datePublished">2016-08-23</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/08/23/《高扩展性网站的50条原则》读书笔记/">《高扩展性网站的50条原则》读书笔记</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="一-化简方程"><a href="#一-化简方程" class="headerlink" title="一.化简方程"></a>一.化简方程</h2><pre><code>1.不要过度设计
-2.设计时就考虑扩展性
-3.把方案一简再简
-4.减少dns查找
-5.尽可能减少对象
-6.使用同一品牌的网络设备
-</code></pre><h2 id="二-分布工作"><a href="#二-分布工作" class="headerlink" title="二.分布工作"></a>二.分布工作</h2><pre><code>7.横向复制(x轴原则)
-8.拆分不同的东西（y轴原则)  动词拆分操作，名词拆分资源
-9.拆分相近的东西 （数据切片)
-</code></pre><h2 id="三-横向扩展设计"><a href="#三-横向扩展设计" class="headerlink" title="三.横向扩展设计"></a>三.横向扩展设计</h2><pre><code>10.设计横向扩展方案
-11.采用经济型系统
-12.横向扩展数据中心
-13.利用云计算进行设计
-</code></pre><h2 id="四-使用正确的工具"><a href="#四-使用正确的工具" class="headerlink" title="四.使用正确的工具"></a>四.使用正确的工具</h2><pre><code>14.合理使用数据库
-15.防火墙，到处都是防火墙
-16.积极利用日志文件
-</code></pre><h2 id="五-不要重复工作"><a href="#五-不要重复工作" class="headerlink" title="五.不要重复工作"></a>五.不要重复工作</h2><pre><code>17.不要立即检查刚做过的工作
-18.停止重定向
-19.放松时序约束
-</code></pre><h2 id="六-积极使用缓存"><a href="#六-积极使用缓存" class="headerlink" title="六.积极使用缓存"></a>六.积极使用缓存</h2><pre><code>20.利用cdn
-21.使用过期头
-22.缓存ajax调用
-23.利用页面缓存
-24.利用应用缓存
-25.利用对象缓存
-26.把对象缓存到自己的层上
-</code></pre><h2 id="七-从错误中吸取教训"><a href="#七-从错误中吸取教训" class="headerlink" title="七.从错误中吸取教训"></a>七.从错误中吸取教训</h2><pre><code>27.积极地学习
-28.不要依靠qa发现失误
-29.没有回退功能的设计是失败的设计
-30.讨论失败并从中吸取教训
-</code></pre><h2 id="八-数据库原则"><a href="#八-数据库原则" class="headerlink" title="八.数据库原则"></a>八.数据库原则</h2><pre><code>31.注意代价高的关系
-32.使用类型正确的数据库锁
-33.不要使用多阶段提交
-34.不要使用select for update
-35.不要选择所有数据
-</code></pre><h2 id="九-容错设计与故障控制"><a href="#九-容错设计与故障控制" class="headerlink" title="九.容错设计与故障控制"></a>九.容错设计与故障控制</h2><pre><code>36.采取隔离故障的泳道
-37.绝对不要信任单点鼓掌
-38.避免系统串联
-39.确保能够启用禁用功能
-</code></pre><h2 id="十-避免或分发状态"><a href="#十-避免或分发状态" class="headerlink" title="十.避免或分发状态"></a>十.避免或分发状态</h2><pre><code>40.努力实现无状态
-41.尽量在浏览器端维护会话
-42.利用分布式缓存存放状态
-</code></pre><h2 id="十一-异步通信与总线"><a href="#十一-异步通信与总线" class="headerlink" title="十一.异步通信与总线"></a>十一.异步通信与总线</h2><pre><code>43.尽可能使用异步通信
-44.确保消息总线能够扩展
-45.避免消息总线过度拥挤
-</code></pre><h2 id="十二-其他原则"><a href="#十二-其他原则" class="headerlink" title="十二.其他原则"></a>十二.其他原则</h2><pre><code>46.慎用第三方解决方案扩展
-47.清除 归档 成本合理的存储
-48.删除事务处理中的商业智能
-49.设计能够监控的应用
-50.要能胜任
-</code></pre>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/技术/">技术</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/读书/">读书</a></li></ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-	<a class="article-category-link" href="/categories/读书笔记/">读书笔记</a>
-	</div>
-
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
     </nav>
   
 </div>

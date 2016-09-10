@@ -4,48 +4,18 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>对比tick与open-falcon | 爱生活爱编码</title>
+  <title>《奇特的一生》摘录 | 爱生活爱编码</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="架构图open-falcon
-tick
-费用F: 开源免费
-T: 部分免费，企业版特殊收费
-扩展性F: 大多组件可以水平扩展
-T: 免费版 influxDB单点，不支持集群
-AgentF: agent留有api接口，用户可以直接上报数据到agent.这个设计也比较灵活
-T: 所有收集项都预编进telegraf,根据配置启动
-部署F: 组件多扩展性好。部署的组件也就多。部署成本高一些
-T: 免费版就">
+  <meta name="description" content="我们真诚地相信我们是尽力而为，认真地埋头工作，蓦然发现我们真正做工作的时间说不定只有一个小时，一个半小时，其余的时间都流走了，消逝了，浪费在无谓的奔忙和聊天上，浪费在等待鸿鹄将至。我们不是挺珍惜每一分钟的嘛，放弃了休息，摒绝了娱乐……">
 <meta property="og:type" content="article">
-<meta property="og:title" content="对比tick与open-falcon">
-<meta property="og:url" content="http://yoursite.com/2016/08/27/对比tick与open-falcon/index.html">
+<meta property="og:title" content="《奇特的一生》摘录">
+<meta property="og:url" content="http://yoursite.com/2016/09/10/《奇特的一生》摘录/index.html">
 <meta property="og:site_name" content="爱生活爱编码">
-<meta property="og:description" content="架构图open-falcon
-tick
-费用F: 开源免费
-T: 部分免费，企业版特殊收费
-扩展性F: 大多组件可以水平扩展
-T: 免费版 influxDB单点，不支持集群
-AgentF: agent留有api接口，用户可以直接上报数据到agent.这个设计也比较灵活
-T: 所有收集项都预编进telegraf,根据配置启动
-部署F: 组件多扩展性好。部署的组件也就多。部署成本高一些
-T: 免费版就">
-<meta property="og:image" content="http://oc1d7itlt.bkt.clouddn.com/falcon-arch.png?imageView2/2/w/800/h/400/interlace/0/q/100|watermark/2/text/b3NjZXJzb25nMDA3/font/5a6L5L2T/fontsize/500/fill/I0VGRUZFRg==/dissolve/53/gravity/SouthEast/dx/10/dy/10">
-<meta property="og:image" content="http://oc1d7itlt.bkt.clouddn.com/TICK-Stack.png?imageView2/2/w/800/h/400/interlace/0/q/100|watermark/2/text/b3NjZXJzb25nMDA3/font/5a6L5L2T/fontsize/500/fill/I0VGRUZFRg==/dissolve/53/gravity/SouthEast/dx/10/dy/10">
-<meta property="og:updated_time" content="2016-08-27T07:05:46.000Z">
+<meta property="og:description" content="我们真诚地相信我们是尽力而为，认真地埋头工作，蓦然发现我们真正做工作的时间说不定只有一个小时，一个半小时，其余的时间都流走了，消逝了，浪费在无谓的奔忙和聊天上，浪费在等待鸿鹄将至。我们不是挺珍惜每一分钟的嘛，放弃了休息，摒绝了娱乐……">
+<meta property="og:updated_time" content="2016-09-10T15:35:02.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="对比tick与open-falcon">
-<meta name="twitter:description" content="架构图open-falcon
-tick
-费用F: 开源免费
-T: 部分免费，企业版特殊收费
-扩展性F: 大多组件可以水平扩展
-T: 免费版 influxDB单点，不支持集群
-AgentF: agent留有api接口，用户可以直接上报数据到agent.这个设计也比较灵活
-T: 所有收集项都预编进telegraf,根据配置启动
-部署F: 组件多扩展性好。部署的组件也就多。部署成本高一些
-T: 免费版就">
-<meta name="twitter:image" content="http://oc1d7itlt.bkt.clouddn.com/falcon-arch.png?imageView2/2/w/800/h/400/interlace/0/q/100|watermark/2/text/b3NjZXJzb25nMDA3/font/5a6L5L2T/fontsize/500/fill/I0VGRUZFRg==/dissolve/53/gravity/SouthEast/dx/10/dy/10">
+<meta name="twitter:title" content="《奇特的一生》摘录">
+<meta name="twitter:description" content="我们真诚地相信我们是尽力而为，认真地埋头工作，蓦然发现我们真正做工作的时间说不定只有一个小时，一个半小时，其余的时间都流走了，消逝了，浪费在无谓的奔忙和聊天上，浪费在等待鸿鹄将至。我们不是挺珍惜每一分钟的嘛，放弃了休息，摒绝了娱乐……">
   
   
     <link rel="icon" href="//favicon.icon">
@@ -207,11 +177,11 @@ T: 免费版就">
 	</div>
 </nav>
 
-      <div class="body-wrap"><article id="post-对比tick与open-falcon" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-《奇特的一生》摘录" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/08/27/对比tick与open-falcon/" class="article-date">
-  	<time datetime="2016-08-27T06:25:38.000Z" itemprop="datePublished">2016-08-27</time>
+      <a href="/2016/09/10/《奇特的一生》摘录/" class="article-date">
+  	<time datetime="2016-09-10T15:27:57.000Z" itemprop="datePublished">2016-09-10</time>
 </a>
     </div>
   
@@ -224,7 +194,7 @@ T: 免费版就">
         
   
     <h1 class="article-title" itemprop="name">
-      对比tick与open-falcon
+      《奇特的一生》摘录
     </h1>
   
 
@@ -233,12 +203,12 @@ T: 免费版就">
       <div class="article-info article-info-post">
         
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/监控/">监控</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/读书/">读书</a></li></ul>
 	</div>
 
         
 	<div class="article-category tagcloud">
-	<a class="article-category-link" href="/categories/监控/">监控</a>
+	<a class="article-category-link" href="/categories/读书笔记/">读书笔记</a>
 	</div>
 
 
@@ -248,20 +218,7 @@ T: 免费版就">
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="架构图"><a href="#架构图" class="headerlink" title="架构图"></a>架构图</h2><h4 id="open-falcon"><a href="#open-falcon" class="headerlink" title="open-falcon"></a>open-falcon</h4><p><img src="http://oc1d7itlt.bkt.clouddn.com/falcon-arch.png?imageView2/2/w/800/h/400/interlace/0/q/100|watermark/2/text/b3NjZXJzb25nMDA3/font/5a6L5L2T/fontsize/500/fill/I0VGRUZFRg==/dissolve/53/gravity/SouthEast/dx/10/dy/10" alt="open-falcon"></p>
-<h4 id="tick"><a href="#tick" class="headerlink" title="tick"></a>tick</h4><p><img src="http://oc1d7itlt.bkt.clouddn.com/TICK-Stack.png?imageView2/2/w/800/h/400/interlace/0/q/100|watermark/2/text/b3NjZXJzb25nMDA3/font/5a6L5L2T/fontsize/500/fill/I0VGRUZFRg==/dissolve/53/gravity/SouthEast/dx/10/dy/10" alt="tick"></p>
-<h3 id="费用"><a href="#费用" class="headerlink" title="费用"></a>费用</h3><pre><code>F: 开源免费
-T: 部分免费，企业版特殊收费
-</code></pre><h3 id="扩展性"><a href="#扩展性" class="headerlink" title="扩展性"></a>扩展性</h3><pre><code>F: 大多组件可以水平扩展
-T: 免费版 influxDB单点，不支持集群
-</code></pre><h3 id="Agent"><a href="#Agent" class="headerlink" title="Agent"></a>Agent</h3><pre><code>F: agent留有api接口，用户可以直接上报数据到agent.这个设计也比较灵活
-T: 所有收集项都预编进telegraf,根据配置启动
-</code></pre><h3 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h3><pre><code>F: 组件多扩展性好。部署的组件也就多。部署成本高一些
-T: 免费版就四个组件。企业版目前不了解
-</code></pre><h3 id="易用性"><a href="#易用性" class="headerlink" title="易用性"></a>易用性</h3><pre><code>F: 报警，用户管理，收集数据等比较通用
-T: 对于agent不支持不方便接入。但是telegraf支持多个output
-</code></pre><h3 id="数据模型"><a href="#数据模型" class="headerlink" title="数据模型"></a>数据模型</h3><pre><code>数据模型tick优于open-falcon的。对于一个接口的数据可能有访问量，错误数，响应时间，上层处理时间等。tick一条数据直接包含所有指标。open-falcon需要多个。
-</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">open-falcon</div><div class="line"></div><div class="line">	 &#123;</div><div class="line">        &quot;endpoint&quot;: &quot;test-endpoint&quot;,</div><div class="line">        &quot;metric&quot;: &quot;test-metric2&quot;,</div><div class="line">        &quot;timestamp&quot;: ts,</div><div class="line">        &quot;step&quot;: 60,</div><div class="line">        &quot;value&quot;: 2,</div><div class="line">        &quot;counterType&quot;: &quot;GAUGE&quot;,</div><div class="line">        &quot;tags&quot;: &quot;idc=lg,loc=beijing&quot;,</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">tick</div><div class="line"></div><div class="line">	&#123;</div><div class="line">		&quot;metric&quot; : &quot;api&quot;,</div><div class="line">		&quot;fileds&quot; :	visit=3,ok=2,err=1,reqtime=0.3</div><div class="line">		&quot;tags&quot;   :  idc=lg,api=/index/index</div><div class="line">		&quot;timestamp&quot; : </div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+        <p>我们真诚地相信我们是尽力而为，认真地埋头工作，蓦然发现我们真正做工作的时间说不定只有<br>一个小时，一个半小时，其余的时间都流走了，消逝了，浪费在无谓的奔忙和聊天上，浪费在等待<br>鸿鹄将至。我们不是挺珍惜每一分钟的嘛，放弃了休息，摒绝了娱乐……</p>
 
       
     </div>
@@ -271,18 +228,9 @@ T: 对于agent不支持不方便接入。但是telegraf支持多个output
     
 <nav id="article-nav">
   
-    <a href="/2016/08/28/golang构建异步处理队列/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption"><</strong>
-      <div class="article-nav-title">
-        
-          golang构建异步处理队列
-        
-      </div>
-    </a>
   
-  
-    <a href="/2016/08/27/EK实时日志分析/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">EK实时日志分析</div>
+    <a href="/2016/09/03/接口开发中共享资源的Cache处理/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">接口开发中共享资源的Cache处理</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -317,7 +265,7 @@ T: 对于agent不支持不方便接入。但是telegraf支持多个output
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="对比tick与open-falcon" data-title="对比tick与open-falcon" data-url="http://yoursite.com/2016/08/27/对比tick与open-falcon/"></div>
+	<div class="ds-thread" data-thread-key="《奇特的一生》摘录" data-title="《奇特的一生》摘录" data-url="http://yoursite.com/2016/09/10/《奇特的一生》摘录/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
