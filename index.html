@@ -108,7 +108,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/ES/" style="font-size: 10px;">ES</a> <a href="/tags/cache/" style="font-size: 10px;">cache</a> <a href="/tags/golang/" style="font-size: 20px;">golang</a> <a href="/tags/php/" style="font-size: 15px;">php</a> <a href="/tags/异步/" style="font-size: 10px;">异步</a> <a href="/tags/技术/" style="font-size: 10px;">技术</a> <a href="/tags/接口优化/" style="font-size: 10px;">接口优化</a> <a href="/tags/日志/" style="font-size: 10px;">日志</a> <a href="/tags/监控/" style="font-size: 15px;">监控</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a> <a href="/tags/读书/" style="font-size: 15px;">读书</a>
+						<a href="/tags/ES/" style="font-size: 10px;">ES</a> <a href="/tags/cache/" style="font-size: 10px;">cache</a> <a href="/tags/golang/" style="font-size: 20px;">golang</a> <a href="/tags/php/" style="font-size: 15px;">php</a> <a href="/tags/异步/" style="font-size: 10px;">异步</a> <a href="/tags/技术/" style="font-size: 10px;">技术</a> <a href="/tags/接口优化/" style="font-size: 10px;">接口优化</a> <a href="/tags/日志/" style="font-size: 10px;">日志</a> <a href="/tags/监控/" style="font-size: 20px;">监控</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a> <a href="/tags/读书/" style="font-size: 15px;">读书</a>
 					</div>
 				</section>
 				
@@ -177,6 +177,85 @@
 </nav>
 
       <div class="body-wrap">
+  
+    <article id="post-open-falcon监控lnmp应用" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/09/11/open-falcon监控lnmp应用/" class="article-date">
+  	<time datetime="2016-09-11T03:57:44.000Z" itemprop="datePublished">2016-09-11</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/09/11/open-falcon监控lnmp应用/">open-falcon监控lnmp应用</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h6 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h6><pre><code>业务部门监控线上lnmp，快速定位问题，从而快速响应
+对于开发者,各个组件的主要衡量指标:
+    linux: 集群存活状态,机器负载,网卡流量  ----- 对外服务的server状态
+    nginx: 接口状态                        ----- 用户访问情况
+    mysql: db的可用性                   ----- 类似依赖资源的可用性
+    php  : faltal,warning               ----- 代码问题
+</code></pre><h6 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h6><pre><code>监控数据展示的三个层次:
+    1. 项目整体
+    2. 项目对应机房情况
+    3. 项目依赖资源状态
+
+一.整体概况:
+</code></pre><p><img src="http://oc1d7itlt.bkt.clouddn.com/C985FBD4-54E1-43CB-BD5B-AD196EBAC9E1.png?imageView2/2/w/800/h/400/interlace/0/q/100|watermark/2/text/b3NjZXJzb25nMDA3/font/5a6L5L2T/fontsize/500/fill/I0VGRUZFRg==/dissolve/53/gravity/SouthEast/dx/10/dy/10" alt="all"></p>
+<pre><code>二.单个机房情况(除了有与项目整体相同的，还有下图接口数据)
+</code></pre><p><img src="http://oc1d7itlt.bkt.clouddn.com/6D2649A4-C1E0-42E9-97AA-6B0450D1E945.png?imageView2/2/w/800/h/400/interlace/0/q/100|watermark/2/text/b3NjZXJzb25nMDA3/font/5a6L5L2T/fontsize/500/fill/I0VGRUZFRg==/dissolve/53/gravity/SouthEast/dx/10/dy/10" alt="all"></p>
+<pre><code>三. 项目依赖资源的可用性监控数据(需要在server自己探测资源可用情况)
+</code></pre><p><img src="http://oc1d7itlt.bkt.clouddn.com/F3C9ADCD-05A9-4A5E-B1AC-6C07DA81645B.png?imageView2/2/w/800/h/400/interlace/0/q/100|watermark/2/text/b3NjZXJzb25nMDA3/font/5a6L5L2T/fontsize/500/fill/I0VGRUZFRg==/dissolve/53/gravity/SouthEast/dx/10/dy/10" alt=""></p>
+<h6 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h6><pre><code>部署: http://book.open-falcon.org/zh/intro/index.html
+github: https://github.com/open-falcon
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/监控/">监控</a></li></ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/工作/">工作</a>
+	</div>
+
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
   
     <article id="post-《奇特的一生》摘录" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -446,71 +525,6 @@ type EMeta struct {
       
 	<div class="article-category tagcloud">
 	<a class="article-category-link" href="/categories/日志/">日志</a>
-	</div>
-
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-图床域名挂了" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/08/31/图床域名挂了/" class="article-date">
-  	<time datetime="2016-08-30T16:03:22.000Z" itemprop="datePublished">2016-08-31</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/08/31/图床域名挂了/">图床域名挂了!</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>   之前一个周末公司的图床域名不知道怎么回事挂了，直接造成App,Pc页面白了。唯一解决只能把<br>   域名替换了。怎么替换？同事当时直接在框架处理完成之后，直接做字符串替换的。结果发现没用<br>   。如下是index.php 框架处理入口。</p>
-   <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">ob_start();</div><div class="line">$webApp-&gt;run();</div><div class="line">$body = ob_get_clean();</div><div class="line">changeImgDomain($body);		// 临时处理，发现没用</div><div class="line">echo $body;</div></pre></td></tr></table></figure>
-<p>   最后，发现很多控制器里面，在输出数据之后直接die()结束处理流程了。也就是 $webApp()-&gt;run()<br>   下面的没有执行了。幸亏当时使用lua直接在nginx里面直接替换响应数据里的域名了(运气好:1.找到<br>   直接nginx里面处理的方案 2.线上有nignx+lua使用，环境OK)，先把问题给解决了。</p>
-<h6 id="一些想法"><a href="#一些想法" class="headerlink" title="一些想法"></a>一些想法</h6><pre><code>1. 项目开发采用的框架，最好可以对直接杜绝die(),exit()来规范开发者。
-2. 不能满足你的话。最好项目组可以自定义统一输出的方法。
-</code></pre>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/php/">php</a></li></ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-	<a class="article-category-link" href="/categories/php/">php</a>
 	</div>
 
 

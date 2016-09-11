@@ -4,57 +4,34 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>《高扩展性网站的50条原则》读书笔记 | 爱生活爱编码</title>
+  <title>open-falcon监控lnmp应用 | 爱生活爱编码</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="一.化简方程1.不要过度设计
-2.设计时就考虑扩展性
-3.把方案一简再简
-4.减少dns查找
-5.尽可能减少对象
-6.使用同一品牌的网络设备
-二.分布工作7.横向复制(x轴原则)
-8.拆分不同的东西（y轴原则)  动词拆分操作，名词拆分资源
-9.拆分相近的东西 （数据切片)
-三.横向扩展设计10.设计横向扩展方案
-11.采用经济型系统
-12.横向扩展数据中心
-13.利用云计算进行设计
-四.使用正确">
+  <meta name="description" content="目标业务部门监控线上lnmp，快速定位问题，从而快速响应
+对于开发者,各个组件的主要衡量指标:
+    linux: 集群存活状态,机器负载,网卡流量  ----- 对外服务的server状态
+    nginx: 接口状态                        ----- 用户访问情况
+    mysql: db的可用性                   ----- 类似依赖资源的可用">
 <meta property="og:type" content="article">
-<meta property="og:title" content="《高扩展性网站的50条原则》读书笔记">
-<meta property="og:url" content="http://yoursite.com/2016/08/23/《高扩展性网站的50条原则》读书笔记/index.html">
+<meta property="og:title" content="open-falcon监控lnmp应用">
+<meta property="og:url" content="http://yoursite.com/2016/09/11/open-falcon监控lnmp应用/index.html">
 <meta property="og:site_name" content="爱生活爱编码">
-<meta property="og:description" content="一.化简方程1.不要过度设计
-2.设计时就考虑扩展性
-3.把方案一简再简
-4.减少dns查找
-5.尽可能减少对象
-6.使用同一品牌的网络设备
-二.分布工作7.横向复制(x轴原则)
-8.拆分不同的东西（y轴原则)  动词拆分操作，名词拆分资源
-9.拆分相近的东西 （数据切片)
-三.横向扩展设计10.设计横向扩展方案
-11.采用经济型系统
-12.横向扩展数据中心
-13.利用云计算进行设计
-四.使用正确">
-<meta property="og:updated_time" content="2016-08-23T15:36:25.000Z">
+<meta property="og:description" content="目标业务部门监控线上lnmp，快速定位问题，从而快速响应
+对于开发者,各个组件的主要衡量指标:
+    linux: 集群存活状态,机器负载,网卡流量  ----- 对外服务的server状态
+    nginx: 接口状态                        ----- 用户访问情况
+    mysql: db的可用性                   ----- 类似依赖资源的可用">
+<meta property="og:image" content="http://oc1d7itlt.bkt.clouddn.com/C985FBD4-54E1-43CB-BD5B-AD196EBAC9E1.png?imageView2/2/w/800/h/400/interlace/0/q/100|watermark/2/text/b3NjZXJzb25nMDA3/font/5a6L5L2T/fontsize/500/fill/I0VGRUZFRg==/dissolve/53/gravity/SouthEast/dx/10/dy/10">
+<meta property="og:image" content="http://oc1d7itlt.bkt.clouddn.com/6D2649A4-C1E0-42E9-97AA-6B0450D1E945.png?imageView2/2/w/800/h/400/interlace/0/q/100|watermark/2/text/b3NjZXJzb25nMDA3/font/5a6L5L2T/fontsize/500/fill/I0VGRUZFRg==/dissolve/53/gravity/SouthEast/dx/10/dy/10">
+<meta property="og:image" content="http://oc1d7itlt.bkt.clouddn.com/F3C9ADCD-05A9-4A5E-B1AC-6C07DA81645B.png?imageView2/2/w/800/h/400/interlace/0/q/100|watermark/2/text/b3NjZXJzb25nMDA3/font/5a6L5L2T/fontsize/500/fill/I0VGRUZFRg==/dissolve/53/gravity/SouthEast/dx/10/dy/10">
+<meta property="og:updated_time" content="2016-09-11T06:27:52.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="《高扩展性网站的50条原则》读书笔记">
-<meta name="twitter:description" content="一.化简方程1.不要过度设计
-2.设计时就考虑扩展性
-3.把方案一简再简
-4.减少dns查找
-5.尽可能减少对象
-6.使用同一品牌的网络设备
-二.分布工作7.横向复制(x轴原则)
-8.拆分不同的东西（y轴原则)  动词拆分操作，名词拆分资源
-9.拆分相近的东西 （数据切片)
-三.横向扩展设计10.设计横向扩展方案
-11.采用经济型系统
-12.横向扩展数据中心
-13.利用云计算进行设计
-四.使用正确">
+<meta name="twitter:title" content="open-falcon监控lnmp应用">
+<meta name="twitter:description" content="目标业务部门监控线上lnmp，快速定位问题，从而快速响应
+对于开发者,各个组件的主要衡量指标:
+    linux: 集群存活状态,机器负载,网卡流量  ----- 对外服务的server状态
+    nginx: 接口状态                        ----- 用户访问情况
+    mysql: db的可用性                   ----- 类似依赖资源的可用">
+<meta name="twitter:image" content="http://oc1d7itlt.bkt.clouddn.com/C985FBD4-54E1-43CB-BD5B-AD196EBAC9E1.png?imageView2/2/w/800/h/400/interlace/0/q/100|watermark/2/text/b3NjZXJzb25nMDA3/font/5a6L5L2T/fontsize/500/fill/I0VGRUZFRg==/dissolve/53/gravity/SouthEast/dx/10/dy/10">
   
   
     <link rel="icon" href="//favicon.icon">
@@ -216,11 +193,11 @@
 	</div>
 </nav>
 
-      <div class="body-wrap"><article id="post-《高扩展性网站的50条原则》读书笔记" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-open-falcon监控lnmp应用" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/08/23/《高扩展性网站的50条原则》读书笔记/" class="article-date">
-  	<time datetime="2016-08-23T14:52:34.000Z" itemprop="datePublished">2016-08-23</time>
+      <a href="/2016/09/11/open-falcon监控lnmp应用/" class="article-date">
+  	<time datetime="2016-09-11T03:57:44.000Z" itemprop="datePublished">2016-09-11</time>
 </a>
     </div>
   
@@ -233,7 +210,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      《高扩展性网站的50条原则》读书笔记
+      open-falcon监控lnmp应用
     </h1>
   
 
@@ -242,12 +219,12 @@
       <div class="article-info article-info-post">
         
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/技术/">技术</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/读书/">读书</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/监控/">监控</a></li></ul>
 	</div>
 
         
 	<div class="article-category tagcloud">
-	<a class="article-category-link" href="/categories/读书笔记/">读书笔记</a>
+	<a class="article-category-link" href="/categories/工作/">工作</a>
 	</div>
 
 
@@ -257,56 +234,25 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="一-化简方程"><a href="#一-化简方程" class="headerlink" title="一.化简方程"></a>一.化简方程</h2><pre><code>1.不要过度设计
-2.设计时就考虑扩展性
-3.把方案一简再简
-4.减少dns查找
-5.尽可能减少对象
-6.使用同一品牌的网络设备
-</code></pre><h2 id="二-分布工作"><a href="#二-分布工作" class="headerlink" title="二.分布工作"></a>二.分布工作</h2><pre><code>7.横向复制(x轴原则)
-8.拆分不同的东西（y轴原则)  动词拆分操作，名词拆分资源
-9.拆分相近的东西 （数据切片)
-</code></pre><h2 id="三-横向扩展设计"><a href="#三-横向扩展设计" class="headerlink" title="三.横向扩展设计"></a>三.横向扩展设计</h2><pre><code>10.设计横向扩展方案
-11.采用经济型系统
-12.横向扩展数据中心
-13.利用云计算进行设计
-</code></pre><h2 id="四-使用正确的工具"><a href="#四-使用正确的工具" class="headerlink" title="四.使用正确的工具"></a>四.使用正确的工具</h2><pre><code>14.合理使用数据库
-15.防火墙，到处都是防火墙
-16.积极利用日志文件
-</code></pre><h2 id="五-不要重复工作"><a href="#五-不要重复工作" class="headerlink" title="五.不要重复工作"></a>五.不要重复工作</h2><pre><code>17.不要立即检查刚做过的工作
-18.停止重定向
-19.放松时序约束
-</code></pre><h2 id="六-积极使用缓存"><a href="#六-积极使用缓存" class="headerlink" title="六.积极使用缓存"></a>六.积极使用缓存</h2><pre><code>20.利用cdn
-21.使用过期头
-22.缓存ajax调用
-23.利用页面缓存
-24.利用应用缓存
-25.利用对象缓存
-26.把对象缓存到自己的层上
-</code></pre><h2 id="七-从错误中吸取教训"><a href="#七-从错误中吸取教训" class="headerlink" title="七.从错误中吸取教训"></a>七.从错误中吸取教训</h2><pre><code>27.积极地学习
-28.不要依靠qa发现失误
-29.没有回退功能的设计是失败的设计
-30.讨论失败并从中吸取教训
-</code></pre><h2 id="八-数据库原则"><a href="#八-数据库原则" class="headerlink" title="八.数据库原则"></a>八.数据库原则</h2><pre><code>31.注意代价高的关系
-32.使用类型正确的数据库锁
-33.不要使用多阶段提交
-34.不要使用select for update
-35.不要选择所有数据
-</code></pre><h2 id="九-容错设计与故障控制"><a href="#九-容错设计与故障控制" class="headerlink" title="九.容错设计与故障控制"></a>九.容错设计与故障控制</h2><pre><code>36.采取隔离故障的泳道
-37.绝对不要信任单点鼓掌
-38.避免系统串联
-39.确保能够启用禁用功能
-</code></pre><h2 id="十-避免或分发状态"><a href="#十-避免或分发状态" class="headerlink" title="十.避免或分发状态"></a>十.避免或分发状态</h2><pre><code>40.努力实现无状态
-41.尽量在浏览器端维护会话
-42.利用分布式缓存存放状态
-</code></pre><h2 id="十一-异步通信与总线"><a href="#十一-异步通信与总线" class="headerlink" title="十一.异步通信与总线"></a>十一.异步通信与总线</h2><pre><code>43.尽可能使用异步通信
-44.确保消息总线能够扩展
-45.避免消息总线过度拥挤
-</code></pre><h2 id="十二-其他原则"><a href="#十二-其他原则" class="headerlink" title="十二.其他原则"></a>十二.其他原则</h2><pre><code>46.慎用第三方解决方案扩展
-47.清除 归档 成本合理的存储
-48.删除事务处理中的商业智能
-49.设计能够监控的应用
-50.要能胜任
+        <h6 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h6><pre><code>业务部门监控线上lnmp，快速定位问题，从而快速响应
+对于开发者,各个组件的主要衡量指标:
+    linux: 集群存活状态,机器负载,网卡流量  ----- 对外服务的server状态
+    nginx: 接口状态                        ----- 用户访问情况
+    mysql: db的可用性                   ----- 类似依赖资源的可用性
+    php  : faltal,warning               ----- 代码问题
+</code></pre><h6 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h6><pre><code>监控数据展示的三个层次:
+    1. 项目整体
+    2. 项目对应机房情况
+    3. 项目依赖资源状态
+
+一.整体概况:
+</code></pre><p><img src="http://oc1d7itlt.bkt.clouddn.com/C985FBD4-54E1-43CB-BD5B-AD196EBAC9E1.png?imageView2/2/w/800/h/400/interlace/0/q/100|watermark/2/text/b3NjZXJzb25nMDA3/font/5a6L5L2T/fontsize/500/fill/I0VGRUZFRg==/dissolve/53/gravity/SouthEast/dx/10/dy/10" alt="all"></p>
+<pre><code>二.单个机房情况(除了有与项目整体相同的，还有下图接口数据)
+</code></pre><p><img src="http://oc1d7itlt.bkt.clouddn.com/6D2649A4-C1E0-42E9-97AA-6B0450D1E945.png?imageView2/2/w/800/h/400/interlace/0/q/100|watermark/2/text/b3NjZXJzb25nMDA3/font/5a6L5L2T/fontsize/500/fill/I0VGRUZFRg==/dissolve/53/gravity/SouthEast/dx/10/dy/10" alt="all"></p>
+<pre><code>三. 项目依赖资源的可用性监控数据(需要在server自己探测资源可用情况)
+</code></pre><p><img src="http://oc1d7itlt.bkt.clouddn.com/F3C9ADCD-05A9-4A5E-B1AC-6C07DA81645B.png?imageView2/2/w/800/h/400/interlace/0/q/100|watermark/2/text/b3NjZXJzb25nMDA3/font/5a6L5L2T/fontsize/500/fill/I0VGRUZFRg==/dissolve/53/gravity/SouthEast/dx/10/dy/10" alt=""></p>
+<h6 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h6><pre><code>部署: http://book.open-falcon.org/zh/intro/index.html
+github: https://github.com/open-falcon
 </code></pre>
       
     </div>
@@ -316,15 +262,11 @@
     
 <nav id="article-nav">
   
-    <a href="/2016/08/24/php接口优化-合并请求/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption"><</strong>
-      <div class="article-nav-title">
-        
-          php接口优化:合并请求
-        
-      </div>
-    </a>
   
+    <a href="/2016/09/10/《奇特的一生》摘录/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">《奇特的一生》摘录</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
   
 </nav>
 
@@ -357,7 +299,7 @@
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="《高扩展性网站的50条原则》读书笔记" data-title="《高扩展性网站的50条原则》读书笔记" data-url="http://yoursite.com/2016/08/23/《高扩展性网站的50条原则》读书笔记/"></div>
+	<div class="ds-thread" data-thread-key="open-falcon监控lnmp应用" data-title="open-falcon监控lnmp应用" data-url="http://yoursite.com/2016/09/11/open-falcon监控lnmp应用/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
