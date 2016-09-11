@@ -75,7 +75,7 @@
 						<li>Links</li>
 						
 						
-						<li>About</li>
+						<li>Über</li>
 						
 					</ul>
 				</div>
@@ -104,7 +104,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/ES/" style="font-size: 10px;">ES</a> <a href="/tags/cache/" style="font-size: 10px;">cache</a> <a href="/tags/golang/" style="font-size: 20px;">golang</a> <a href="/tags/php/" style="font-size: 15px;">php</a> <a href="/tags/异步/" style="font-size: 10px;">异步</a> <a href="/tags/技术/" style="font-size: 10px;">技术</a> <a href="/tags/接口优化/" style="font-size: 10px;">接口优化</a> <a href="/tags/日志/" style="font-size: 10px;">日志</a> <a href="/tags/监控/" style="font-size: 20px;">监控</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a> <a href="/tags/读书/" style="font-size: 15px;">读书</a>
+						<a href="/tags/ES/" style="font-size: 10px;">ES</a> <a href="/tags/cache/" style="font-size: 10px;">cache</a> <a href="/tags/golang/" style="font-size: 20px;">golang</a> <a href="/tags/php/" style="font-size: 15px;">php</a> <a href="/tags/异步/" style="font-size: 10px;">异步</a> <a href="/tags/技术/" style="font-size: 10px;">技术</a> <a href="/tags/接口优化/" style="font-size: 10px;">接口优化</a> <a href="/tags/日志/" style="font-size: 10px;">日志</a> <a href="/tags/监控/" style="font-size: 20px;">监控</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a> <a href="/tags/读书/" style="font-size: 15px;">读书</a> <a href="/tags/运营/" style="font-size: 10px;">运营</a>
 					</div>
 				</section>
 				
@@ -169,6 +169,68 @@
 </nav>
 
       <div class="body-wrap">
+  
+    <article id="post-telegraf插件化实现" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/08/26/telegraf插件化实现/" class="article-date">
+  	<time datetime="2016-08-26T14:14:02.000Z" itemprop="datePublished">2016-08-26</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/26/telegraf插件化实现/">telegraf插件化实现</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="tick监控栈"><a href="#tick监控栈" class="headerlink" title="tick监控栈"></a>tick监控栈</h3><p><img src="http://oc1d7itlt.bkt.clouddn.com/tick-stack.jpg" alt="tick stack"></p>
+<h3 id="Telegraf插件化实现"><a href="#Telegraf插件化实现" class="headerlink" title="Telegraf插件化实现"></a>Telegraf插件化实现</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div></pre></td><td class="code"><pre><div class="line">telegraf插件加载及调用: (nginx为例,别的插件类似)</div><div class="line"></div><div class="line">一.功能插件</div><div class="line">1. nginx.go</div><div class="line"></div><div class="line">#  // telegraf.go import : _ &quot;github.com/influxdata/telegraf/plugins/inputs/all&quot;</div><div class="line"></div><div class="line">func init() &#123;</div><div class="line">    inputs.Add(&quot;nginx&quot;, func() telegraf.Input &#123;</div><div class="line">        return &amp;Nginx&#123;&#125;</div><div class="line">    &#125;)</div><div class="line">&#125;</div><div class="line">#</div><div class="line"></div><div class="line">2. registry.go</div><div class="line">#</div><div class="line">package inputs</div><div class="line"></div><div class="line">import &quot;github.com/influxdata/telegraf&quot;</div><div class="line"></div><div class="line">type Creator func() telegraf.Input     　//采集数据Input接口定义,主要方法:Gather (参考input.go)</div><div class="line">                                            注意: Creator 是函数类型,对应函数返回的是 满足Input接口的类型</div><div class="line"></div><div class="line">var Inputs = map[string]Creator&#123;&#125;         //插件集合映射, map[&quot;Nginx&quot;]&amp;Nginx&#123;&#125;</div><div class="line"></div><div class="line">func Add(name string, creator Creator) &#123;</div><div class="line">    Inputs[name] = creator</div><div class="line">&#125;</div><div class="line">#</div><div class="line"></div><div class="line">二.telegraf代理加载配置</div><div class="line"></div><div class="line">1. 加载配置文件</div><div class="line">#</div><div class="line"> c.LoadConfig(*fConfig)            // telegraf.go</div><div class="line">#</div><div class="line"></div><div class="line">2.</div><div class="line">#</div><div class="line">c.LoadConfig()    ---&gt; c.addInput()</div><div class="line"></div><div class="line">    creator, ok := inputs.Inputs[name]        // 全局Inputs</div><div class="line">    if !ok &#123;</div><div class="line">        return fmt.Errorf(&quot;Undefined but requested input: %s&quot;, name)</div><div class="line">    &#125;</div><div class="line">    input := creator()</div><div class="line"></div><div class="line">    rp := &amp;internal_models.RunningInput&#123;        //</div><div class="line">        Name:   name,</div><div class="line">        Input:  input,</div><div class="line">        Config: pluginConfig,</div><div class="line">    &#125;</div><div class="line">    c.Inputs = append(c.Inputs, rp)</div><div class="line">#</div><div class="line"></div><div class="line">#    running_input.go</div><div class="line">type RunningInput struct &#123;</div><div class="line">    Name   string</div><div class="line">    Input  telegraf.Input</div><div class="line">    Config *InputConfig</div><div class="line">&#125;</div><div class="line"></div><div class="line">// InputConfig containing a name, interval, and filter</div><div class="line">type InputConfig struct &#123;</div><div class="line">    Name              string</div><div class="line">    NameOverride      string</div><div class="line">    MeasurementPrefix string</div><div class="line">    MeasurementSuffix string</div><div class="line">    Tags              map[string]string</div><div class="line">    Filter            Filter</div><div class="line">    Interval          time.Duration</div><div class="line">&#125;</div><div class="line">#</div><div class="line"></div><div class="line">#</div><div class="line">type Config struct &#123;</div><div class="line">    Tags          map[string]string</div><div class="line">    InputFilters  []string</div><div class="line">    OutputFilters []string</div><div class="line">    Agent   *AgentConfig</div><div class="line">    Inputs  []*internal_models.RunningInput</div><div class="line">    Outputs []*internal_models.RunningOutput</div><div class="line">&#125;</div><div class="line">#</div><div class="line"></div><div class="line">三.telegraf调用插件</div><div class="line">1.入口:    telegraf.go</div><div class="line">#</div><div class="line">        ag, err := agent.NewAgent(c)        // c 全局配置</div><div class="line">        ag.Run(shutdown)</div><div class="line">#</div><div class="line"></div><div class="line">2. ag.Run()    // agent.go</div><div class="line">#</div><div class="line">        //  优先启动服务类插件</div><div class="line">        //</div><div class="line">        //</div><div class="line">        //  插件类 gatherSeparate        // 每个插件对应一个goroutine 各走各的计时器</div><div class="line">        //</div><div class="line">        //</div><div class="line">        //  代理并发 gatherParallel</div><div class="line">#</div><div class="line"></div><div class="line">3. 插件类</div><div class="line">#</div><div class="line">func (a *Agent) gatherSeparate(</div><div class="line">    shutdown chan struct&#123;&#125;,</div><div class="line">    input *internal_models.RunningInput,</div><div class="line">    metricC chan telegraf.Metric,</div><div class="line">) &#123;</div><div class="line">        input.Input.Gather(acc)   ---&gt; package nginx; Gather()</div><div class="line">&#125;</div><div class="line">#</div><div class="line"></div><div class="line">四.数据写入: (channel通信传递) 10000带缓冲的通道</div><div class="line">#</div><div class="line">            for _, o := range a.Config.Outputs &#123;        // 与inputs初始化类似 NewRunningOutput()</div><div class="line">                o.AddMetric(m)</div><div class="line">            &#125;</div><div class="line">#</div><div class="line"></div><div class="line">#</div><div class="line">type RunningOutput struct &#123;                // 类型组合 RunningOutput 除了AddMetric()方法外 还有</div><div class="line">                                            // 具体output的实现方法</div><div class="line">    Name              string</div><div class="line">    Output            telegraf.Output    // Output interface 参考: output.go</div><div class="line">    Config            *OutputConfig</div><div class="line">    Quiet             bool</div><div class="line">    MetricBufferLimit int</div><div class="line">    MetricBatchSize   int</div><div class="line">    metrics     *buffer.Buffer</div><div class="line">    failMetrics *buffer.Buffer</div><div class="line">&#125;</div><div class="line">#</div><div class="line"></div><div class="line">func (ro *RunningOutput) AddMetric(metric telegraf.Metric) &#123;</div><div class="line">                err := ro.write(batch)        --&gt; influxdata</div><div class="line">&#125;</div><div class="line"></div><div class="line">type Output interface &#123;</div><div class="line">    // Connect to the Output</div><div class="line">    Connect() error</div><div class="line">    // Close any connections to the Output</div><div class="line">    Close() error</div><div class="line">    // Description returns a one-sentence description on the Output</div><div class="line">    Description() string</div><div class="line">    // SampleConfig returns the default configuration of the Output</div><div class="line">    SampleConfig() string</div><div class="line">    // Write takes in group of points to be written to the Output</div><div class="line">    Write(metrics []Metric) error</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/golang/">golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/监控/">监控</a></li></ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/golang/">golang</a>
+	</div>
+
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
   
     <article id="post-php接口优化-合并请求" class="article article-type-post" itemscope itemprop="blogPost">
   
