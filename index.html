@@ -104,7 +104,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/ES/" style="font-size: 10px;">ES</a> <a href="/tags/cache/" style="font-size: 10px;">cache</a> <a href="/tags/golang/" style="font-size: 20px;">golang</a> <a href="/tags/php/" style="font-size: 15px;">php</a> <a href="/tags/异步/" style="font-size: 10px;">异步</a> <a href="/tags/技术/" style="font-size: 10px;">技术</a> <a href="/tags/接口/" style="font-size: 10px;">接口</a> <a href="/tags/接口优化/" style="font-size: 10px;">接口优化</a> <a href="/tags/日志/" style="font-size: 10px;">日志</a> <a href="/tags/监控/" style="font-size: 20px;">监控</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a> <a href="/tags/读书/" style="font-size: 15px;">读书</a> <a href="/tags/运营/" style="font-size: 10px;">运营</a>
+						<a href="/tags/ES/" style="font-size: 10px;">ES</a> <a href="/tags/cache/" style="font-size: 10px;">cache</a> <a href="/tags/golang/" style="font-size: 20px;">golang</a> <a href="/tags/php/" style="font-size: 15px;">php</a> <a href="/tags/异步/" style="font-size: 10px;">异步</a> <a href="/tags/技术/" style="font-size: 10px;">技术</a> <a href="/tags/接口/" style="font-size: 10px;">接口</a> <a href="/tags/接口优化/" style="font-size: 10px;">接口优化</a> <a href="/tags/日志/" style="font-size: 10px;">日志</a> <a href="/tags/监控/" style="font-size: 20px;">监控</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a> <a href="/tags/读书/" style="font-size: 20px;">读书</a> <a href="/tags/运营/" style="font-size: 10px;">运营</a>
 					</div>
 				</section>
 				
@@ -169,6 +169,66 @@
 </nav>
 
       <div class="body-wrap">
+  
+    <article id="post-近期看的书" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/09/25/近期看的书/" class="article-date">
+  	<time datetime="2016-09-25T02:10:55.000Z" itemprop="datePublished">2016-09-25</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/09/25/近期看的书/">近期看的书</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>《暗时间》</p>
+<p>《如何高效学习》</p>
+<p>《清醒思考的艺术》</p>
+<p>《你的生命有什么可能》</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/读书/">读书</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
   
     <article id="post-让App灵活扩展" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -468,86 +528,6 @@ github: https://github.com/open-falcon
       
 	<div class="article-category tagcloud">
 	<a class="article-category-link" href="/categories/读书笔记/">读书笔记</a>
-	</div>
-
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-接口开发中共享资源的Cache处理" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/09/03/接口开发中共享资源的Cache处理/" class="article-date">
-  	<time datetime="2016-09-03T13:47:21.000Z" itemprop="datePublished">2016-09-03</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/09/03/接口开发中共享资源的Cache处理/">接口开发中共享资源的Cache处理</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <pre><code>这里共享资源的定义，就是多个用户可能同时访问到的资源。比如功能首页的列表，活动页面等等。
-</code></pre><h5 id="方案1：后台脚本刷新"><a href="#方案1：后台脚本刷新" class="headerlink" title="方案1：后台脚本刷新"></a>方案1：后台脚本刷新</h5><pre><code>通过后台脚本将后台配置的内容定时刷新到cache中，接口直接读对应键内容。
-
-特点：1. server主动更新Cache
-     2. 所有用户读到的内容都是一致的。
-     3. 如果后台没有设置有效期。前端接口可以100%读到数据
-
-适用场景: 对对象信息的处理，如商品信息，应用信息等。供其他服务适用
-</code></pre><h5 id="方案2：定时失效更新"><a href="#方案2：定时失效更新" class="headerlink" title="方案2：定时失效更新"></a>方案2：定时失效更新</h5><pre><code>一个用户读数据，缓存不存在时，访问db然后cache(固定有效期),最后返回给用户。之后在这段
-有效期内所有用户访问该数据会直接返回cache内容。等cache失效会重新读库并cache
-
-特点： 1. Cache随用户访问更新
-      2. 可能引发cache穿透。大量访问压向后台db,频繁更新无用的Cache
-      3. 为了处理穿透，部分用户访问的内容可能不同
-
-适用场景: 列表资源，涉及分页等处理。
-</code></pre><h6 id="如何处理穿透？"><a href="#如何处理穿透？" class="headerlink" title="如何处理穿透？"></a>如何处理穿透？</h6><pre><code>1. cache失效时，多个用户访问只许一个访问db（加锁）。别的用户访问到锁则不进行数据库访问
-2. cache失效，那些访问到锁又不查库。给用户返回空数据？ 不行！ 怎么处理？ 假失效！
-    如何假失效？ key 对应的数据 =》 （DB内容 + expire过期截止时间） 。 expire大于当前
-    时间说明失效，去访问DB，发现有锁，说明别人已经在更新缓存。自己则返回本该失效的内容。
-</code></pre>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cache/">cache</a></li></ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-	<a class="article-category-link" href="/categories/技术/">技术</a>
 	</div>
 
 
