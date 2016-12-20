@@ -104,7 +104,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/ES/" style="font-size: 10px;">ES</a> <a href="/tags/cache/" style="font-size: 10px;">cache</a> <a href="/tags/golang/" style="font-size: 20px;">golang</a> <a href="/tags/php/" style="font-size: 20px;">php</a> <a href="/tags/pm2/" style="font-size: 10px;">pm2</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/互联网/" style="font-size: 10px;">互联网</a> <a href="/tags/异步/" style="font-size: 15px;">异步</a> <a href="/tags/技术/" style="font-size: 20px;">技术</a> <a href="/tags/接口/" style="font-size: 10px;">接口</a> <a href="/tags/接口优化/" style="font-size: 10px;">接口优化</a> <a href="/tags/日志/" style="font-size: 10px;">日志</a> <a href="/tags/监控/" style="font-size: 20px;">监控</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a> <a href="/tags/读书/" style="font-size: 20px;">读书</a> <a href="/tags/跑步/" style="font-size: 10px;">跑步</a> <a href="/tags/运营/" style="font-size: 10px;">运营</a>
+						<a href="/tags/ES/" style="font-size: 10px;">ES</a> <a href="/tags/cache/" style="font-size: 10px;">cache</a> <a href="/tags/golang/" style="font-size: 16.67px;">golang</a> <a href="/tags/php/" style="font-size: 20px;">php</a> <a href="/tags/pm2/" style="font-size: 10px;">pm2</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/互联网/" style="font-size: 10px;">互联网</a> <a href="/tags/异步/" style="font-size: 13.33px;">异步</a> <a href="/tags/技术/" style="font-size: 16.67px;">技术</a> <a href="/tags/接口/" style="font-size: 10px;">接口</a> <a href="/tags/接口优化/" style="font-size: 10px;">接口优化</a> <a href="/tags/日志/" style="font-size: 10px;">日志</a> <a href="/tags/监控/" style="font-size: 16.67px;">监控</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a> <a href="/tags/读书/" style="font-size: 16.67px;">读书</a> <a href="/tags/跑步/" style="font-size: 10px;">跑步</a> <a href="/tags/运营/" style="font-size: 10px;">运营</a>
 					</div>
 				</section>
 				
@@ -169,6 +169,67 @@
 </nav>
 
       <div class="body-wrap">
+  
+    <article id="post-Laravel重启单个队列" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/12/20/Laravel重启单个队列/" class="article-date">
+  	<time datetime="2016-12-20T14:21:15.000Z" itemprop="datePublished">2016-12-20</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/12/20/Laravel重启单个队列/">Laravel重启单个队列</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>队列处理器是 long-lived 进程，如果代码改变而队列处理器没有重启，新代码是不生效的。laravel建议使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">php artisan queue:restart</div></pre></td></tr></table></figure>
+<p>但是这个操作会关闭所有正在运行的队列处理器，不会重启。但是若有多个队列，有时可能只更新了单个队列处理的代码。那就只需要重启对应队列处理器就行。</p>
+<p>队列处理流程如下:(vendor/laravel/framework/src/Illuminate/Queue/Worker.php)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">public function daemon($connectionName, $queue = null, $delay = 0, $memory = 128, $sleep = 3, $maxTries = 0)</div><div class="line">&#123;</div><div class="line">    $lastRestart = $this-&gt;getTimestampOfLastQueueRestart();</div><div class="line">    while (true) &#123;</div><div class="line">        if ($this-&gt;daemonShouldRun()) &#123;</div><div class="line">            $this-&gt;runNextJobForDaemon(</div><div class="line">                $connectionName, $queue, $delay, $sleep, $maxTries</div><div class="line">            );</div><div class="line">        &#125; else &#123;</div><div class="line">            $this-&gt;sleep($sleep);</div><div class="line">        &#125;</div><div class="line">        if ($this-&gt;memoryExceeded($memory) || $this-&gt;queueShouldRestart($lastRestart)</div><div class="line">            || $this-&gt;inStopQueueSet($queue) ) &#123;</div><div class="line">            $this-&gt;stop();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">// 临时让指定queue自动关闭，用于重启单个queue</div><div class="line">protected function inStopQueueSet($queue) &#123;</div><div class="line">    return Redis::Sismember(&quot;laravel:stop:queues&quot;,$queue);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>重启操作如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">public function restart($queue) &#123;</div><div class="line">    Redis::Sadd(&quot;laravel:stop:queues&quot;,$queue);</div><div class="line">    while(true) &#123;</div><div class="line">        sleep(1);</div><div class="line">        $worker = $this-&gt;getWorkerNum($queue);</div><div class="line">        if ( $worker == 0) &#123;</div><div class="line">            echo &quot;active worker: $worker\n&quot;;</div><div class="line">            break;</div><div class="line">        &#125; else &#123;</div><div class="line">            echo &quot;active worker: $worker\n&quot;;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    Redis::Srem(&quot;laravel:stop:queues&quot;,$queue);</div><div class="line">    $configs = $this-&gt;getLocalConfig();</div><div class="line">    $worker = $configs[$queue];</div><div class="line">    echo &quot;start queue: $queue\n&quot;;</div><div class="line">    $this-&gt;process($queue,$worker,false);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/php/">php</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
   
     <article id="post-fastcgi-finish-request" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -392,72 +453,6 @@
       
 	<div class="article-tag tagcloud">
 		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-低版本pm2导致负载飙升" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/11/25/低版本pm2导致负载飙升/" class="article-date">
-  	<time datetime="2016-11-25T06:48:16.000Z" itemprop="datePublished">2016-11-25</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/11/25/低版本pm2导致负载飙升/">低版本pm2导致负载飙升</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <pre><code>同事昨天在服务器上执行pm2 list,没反应。重复了几次，服务器就卡爆了。和我之前遇到的一样(执行pm2 list，机器负载飙升，当时怀疑是Pm2，还有业务代码)，这次又复现了。阿里云单核负载快到20。不同的业务代码。
-
-从系统日志看到服务被oom-killer处理了(当时占内存最大的)。异常发现多个PM2进程(当前登陆用户)，之前都是root启动pm2.
-
-从监控可以看到现象: load，io-wait飙升，cpu利用率不高。感觉负载较高时，监控数据有些验证。load还是平均的。。。
-
-复现:找了一台机器。root用户执行pm2 list正常。使用自己账号执行，复现了。
-应该是pm导致负载上升，导致内核分配失败，启动oom-killer。业务进程中枪。
-</code></pre><p>解决： 升级pm(1.1.3-&gt;2.1.5)<br>            npm install pm2@latest -g ; pm2 update</p>
-<p>参考:<br><a href="http://www.vpsee.com/2013/10/how-to-configure-the-linux-oom-killer/" target="_blank" rel="external">http://www.vpsee.com/2013/10/how-to-configure-the-linux-oom-killer/</a></p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/pm2/">pm2</a></li></ul>
 	</div>
 
       
