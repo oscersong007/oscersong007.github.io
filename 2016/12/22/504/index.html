@@ -4,21 +4,51 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>fastcgi_finish_request | 爱生活爱编码</title>
+  <title>504 | 爱生活爱编码</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="fastcgi_finish_request:冲刷(flush)所有响应的数据给客户端并结束请求。 这使得客户端结束连接后，需要大量时间运行的任务能够继续运行,后续脚本还是占用cgi进程。避免业务流程太多，响应客户端速度过慢。
-1234567header(&amp;quot;Content-Type: application/json&amp;quot;);echo json_encode([        &amp;a">
+  <meta name="description" content="08:45开始:
+####room服务:  
+
+发现server 504 (nginx)  
+[1040] Too many connections (php-fpm)
+
+####server:
+
+nginx访问日志504.
+(request: “POST /index.php”) execution timed out (136.359234 sec), terminating    
+
+#">
 <meta property="og:type" content="article">
-<meta property="og:title" content="fastcgi_finish_request">
-<meta property="og:url" content="http://yoursite.com/2016/12/19/fastcgi-finish-request/index.html">
+<meta property="og:title" content="504">
+<meta property="og:url" content="http://yoursite.com/2016/12/22/504/index.html">
 <meta property="og:site_name" content="爱生活爱编码">
-<meta property="og:description" content="fastcgi_finish_request:冲刷(flush)所有响应的数据给客户端并结束请求。 这使得客户端结束连接后，需要大量时间运行的任务能够继续运行,后续脚本还是占用cgi进程。避免业务流程太多，响应客户端速度过慢。
-1234567header(&amp;quot;Content-Type: application/json&amp;quot;);echo json_encode([        &amp;a">
-<meta property="og:updated_time" content="2016-12-19T06:10:57.000Z">
+<meta property="og:description" content="08:45开始:
+####room服务:  
+
+发现server 504 (nginx)  
+[1040] Too many connections (php-fpm)
+
+####server:
+
+nginx访问日志504.
+(request: “POST /index.php”) execution timed out (136.359234 sec), terminating    
+
+#">
+<meta property="og:updated_time" content="2016-12-22T07:55:17.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="fastcgi_finish_request">
-<meta name="twitter:description" content="fastcgi_finish_request:冲刷(flush)所有响应的数据给客户端并结束请求。 这使得客户端结束连接后，需要大量时间运行的任务能够继续运行,后续脚本还是占用cgi进程。避免业务流程太多，响应客户端速度过慢。
-1234567header(&amp;quot;Content-Type: application/json&amp;quot;);echo json_encode([        &amp;a">
+<meta name="twitter:title" content="504">
+<meta name="twitter:description" content="08:45开始:
+####room服务:  
+
+发现server 504 (nginx)  
+[1040] Too many connections (php-fpm)
+
+####server:
+
+nginx访问日志504.
+(request: “POST /index.php”) execution timed out (136.359234 sec), terminating    
+
+#">
   
   
     <link rel="icon" href="//favicon.icon">
@@ -172,11 +202,11 @@
 	</div>
 </nav>
 
-      <div class="body-wrap"><article id="post-fastcgi-finish-request" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-504" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/12/19/fastcgi-finish-request/" class="article-date">
-  	<time datetime="2016-12-19T06:01:54.000Z" itemprop="datePublished">2016-12-19</time>
+      <a href="/2016/12/22/504/" class="article-date">
+  	<time datetime="2016-12-22T07:17:46.000Z" itemprop="datePublished">2016-12-22</time>
 </a>
     </div>
   
@@ -189,7 +219,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      fastcgi_finish_request
+      504
     </h1>
   
 
@@ -198,7 +228,7 @@
       <div class="article-info article-info-post">
         
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/php/">php</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/504/">504</a></li></ul>
 	</div>
 
         
@@ -209,8 +239,28 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>fastcgi_finish_request:<br>冲刷(flush)所有响应的数据给客户端并结束请求。 这使得客户端结束连接后，需要大量时间运行的任务能够继续运行,后续脚本还是占用cgi进程。<br>避免业务流程太多，响应客户端速度过慢。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">header(&quot;Content-Type: application/json&quot;);</div><div class="line">echo json_encode([</div><div class="line">        &apos;errno&apos; =&gt; 0,</div><div class="line">        &apos;message&apos;  =&gt; &apos;success&apos;,</div><div class="line">     ]);</div><div class="line">fastcgi_finish_request();</div><div class="line">$this-&gt;doSomething();</div></pre></td></tr></table></figure>
+        <p>  08:45开始:</p>
+<p>####room服务:  </p>
+<ol>
+<li>发现server 504 (nginx)  </li>
+<li>[1040] Too many connections (php-fpm)</li>
+</ol>
+<p>####server:</p>
+<ol>
+<li>nginx访问日志504.</li>
+<li>(request: “POST /index.php”) execution timed out (136.359234 sec), terminating    </li>
+</ol>
+<p>####处理：</p>
+<pre><code>1. 查看nginx 访问日志， 发现大量504
+2. 验证laravel框架错误，php错误日志，没发现错误。
+3. 在php-fpm日志中发现执行超时终止执行，可能php-fpm阻塞
+4. 重启cgi, nginx 返回200, 几分钟后又504了 (业务脚本对应服务器监控发现连接数飙升)
+5. 怀疑可能是mysql阻塞，上阿里云rds查看，半小时内连接数直线上升
+    可能是脚本不断重启造成。临时关闭本机cron脚本。不生效。
+6. rds临时扩容解决。
+</code></pre><p>####监控分析如下:<br>    7:40 — 8:10 业务脚本没有安全退出，pm2不停新启。半小时内phantomjs进程数达到100+，<br>    8:10 — 8:40 系统负载200+(机器双核)<br>    8:10 — 8:40 tcp连接数没采集到(系统负载过高)   8:40-8:43 连接数增量350<br>    DB server : 08:45 — 09:10 连接数持续增长</p>
+<p>刚好接上开始故障现象。</p>
+<p>##总结:<br>    故障，可能是几小时之前触发的。<br>    系统负载过高时，会出现监控数据不全。<br>    服务之间共享资源使用需谨慎。</p>
 
       
     </div>
@@ -220,18 +270,9 @@
     
 <nav id="article-nav">
   
-    <a href="/2016/12/20/Laravel重启单个队列/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption"><</strong>
-      <div class="article-nav-title">
-        
-          Laravel重启单个队列
-        
-      </div>
-    </a>
   
-  
-    <a href="/2016/12/17/Laravel队列/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Laravel队列</div>
+    <a href="/2016/12/20/Laravel重启单个队列/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Laravel重启单个队列</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -266,7 +307,7 @@
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="fastcgi-finish-request" data-title="fastcgi_finish_request" data-url="http://yoursite.com/2016/12/19/fastcgi-finish-request/"></div>
+	<div class="ds-thread" data-thread-key="504" data-title="504" data-url="http://yoursite.com/2016/12/22/504/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
