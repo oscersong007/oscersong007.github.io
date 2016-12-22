@@ -75,7 +75,7 @@
 						<li>Links</li>
 						
 						
-						<li>Über</li>
+						<li>About</li>
 						
 					</ul>
 				</div>
@@ -197,27 +197,22 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>  08:45开始:</p>
-<p>####room服务:  </p>
-<ol>
-<li>发现server 504 (nginx)  </li>
-<li>[1040] Too many connections (php-fpm)</li>
-</ol>
-<p>####server:</p>
-<ol>
-<li>nginx访问日志504.</li>
-<li>(request: “POST /index.php”) execution timed out (136.359234 sec), terminating    </li>
-</ol>
-<p>####处理：</p>
+<p>####room服务:</p>
+<pre><code>1.  发现server 504 (nginx)
+2.  [1040] Too many connections (php-fpm)
+</code></pre><p>####server:</p>
+<pre><code>1.  nginx访问日志504.
+2.  (request: &quot;POST /index.php&quot;) execution timed out (136.359234 sec), terminating
+</code></pre><p>####处理：</p>
 <pre><code>1. 查看nginx 访问日志， 发现大量504
 2. 验证laravel框架错误，php错误日志，没发现错误。
 3. 在php-fpm日志中发现执行超时终止执行，可能php-fpm阻塞
 4. 重启cgi, nginx 返回200, 几分钟后又504了 (业务脚本对应服务器监控发现连接数飙升)
-5. 怀疑可能是mysql阻塞，上阿里云rds查看，半小时内连接数直线上升
-    可能是脚本不断重启造成。临时关闭本机cron脚本。不生效。
+5. 怀疑可能是mysql阻塞，上阿里云rds查看，半小时内连接数直线上升.可能是脚本不断重启造成。临时关闭本机cron脚本。不生效。
 6. rds临时扩容解决。
-</code></pre><p>####监控分析如下:<br>    7:40 — 8:10 业务脚本没有安全退出，pm2不停新启。半小时内phantomjs进程数达到100+，<br>    8:10 — 8:40 系统负载200+(机器双核)<br>    8:10 — 8:40 tcp连接数没采集到(系统负载过高)   8:40-8:43 连接数增量350<br>    DB server : 08:45 — 09:10 连接数持续增长</p>
+</code></pre><p>####监控分析如下:<br>    7:40 — 8:10 业务脚本没有安全退出，pm2不停新启。半小时内phantomjs进程数达到100+，<br>    8:10 — 8:40 系统负载200+(机器双核)<br>    8:10 — 8:40 tcp连接数没采集到(系统负载过高)<br>    8:40-8:43 连接数增量350<br>    DB server : 08:45 — 09:10 连接数持续增长</p>
 <p>刚好接上开始故障现象。</p>
-<p>##总结:<br>    故障，可能是几小时之前触发的。<br>    系统负载过高时，会出现监控数据不全。<br>    服务之间共享资源使用需谨慎。</p>
+<p>###总结:<br>    故障，可能是几小时之前触发的。<br>    系统负载过高时，会出现监控数据不全。<br>    服务之间共享资源使用需谨慎。</p>
 
       
     </div>
