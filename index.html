@@ -196,8 +196,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>#####需求:<br>   支持对用户名称的站内搜索<br>   用户分多个平台，在mysql跨表，需要搜索多个表<br>   百万用户记录<br>   mysql模糊匹配太慢</p>
-<p>#####解决:<br>  1.同步mysql数据到elasticsearch<br>  2.通过关键字到elasticsearch匹配，获取到数据(有mysql索引支持)<br>  3.在mysql检索，业务处理，返回客户端<br>注意: mysql与elasticsearch数据同步(全量更新+触发更新)</p>
+        <p>#####需求:<br>    支持对用户名称的站内搜索<br>    用户分多个平台，在mysql跨表，需要搜索多个表<br>    百万用户记录<br>    mysql模糊匹配太慢</p>
+<p>#####解决:<br>      1.同步mysql数据到elasticsearch<br>      2.通过关键字到elasticsearch匹配，获取到数据(有mysql索引支持)<br>      3.在mysql检索，业务处理，返回客户端<br>    注意: mysql与elasticsearch数据同步(全量更新+触发更新)</p>
 <p>#####参考:</p>
 <ul>
 <li><a href="https://www.elastic.co/guide/en/elasticsearch/client/php-api/current/_search_operations.html" target="_blank" rel="external">https://www.elastic.co/guide/en/elasticsearch/client/php-api/current/_search_operations.html</a></li>
