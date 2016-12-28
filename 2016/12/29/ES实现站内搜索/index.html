@@ -4,17 +4,21 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>Tag: 互联网 | 爱生活爱编码</title>
+  <title>ES实现站内搜索 | 爱生活爱编码</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="hello,world!">
-<meta property="og:type" content="website">
-<meta property="og:title" content="爱生活爱编码">
-<meta property="og:url" content="http://yoursite.com/tags/互联网/index.html">
+  <meta name="description" content="#####需求:   支持对用户名称的站内搜索   用户分多个平台，在mysql跨表，需要搜索多个表   百万用户记录   mysql模糊匹配太慢
+#####解决:  1.同步mysql数据到elasticsearch  2.通过关键字到elasticsearch匹配，获取到数据(有mysql索引支持)  3.在mysql检索，业务处理，返回客户端注意: mysql与elasticsearch数据">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ES实现站内搜索">
+<meta property="og:url" content="http://yoursite.com/2016/12/29/ES实现站内搜索/index.html">
 <meta property="og:site_name" content="爱生活爱编码">
-<meta property="og:description" content="hello,world!">
+<meta property="og:description" content="#####需求:   支持对用户名称的站内搜索   用户分多个平台，在mysql跨表，需要搜索多个表   百万用户记录   mysql模糊匹配太慢
+#####解决:  1.同步mysql数据到elasticsearch  2.通过关键字到elasticsearch匹配，获取到数据(有mysql索引支持)  3.在mysql检索，业务处理，返回客户端注意: mysql与elasticsearch数据">
+<meta property="og:updated_time" content="2016-12-28T17:39:16.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="爱生活爱编码">
-<meta name="twitter:description" content="hello,world!">
+<meta name="twitter:title" content="ES实现站内搜索">
+<meta name="twitter:description" content="#####需求:   支持对用户名称的站内搜索   用户分多个平台，在mysql跨表，需要搜索多个表   百万用户记录   mysql模糊匹配太慢
+#####解决:  1.同步mysql数据到elasticsearch  2.通过关键字到elasticsearch匹配，获取到数据(有mysql索引支持)  3.在mysql检索，业务处理，返回客户端注意: mysql与elasticsearch数据">
   
   
     <link rel="icon" href="//favicon.icon">
@@ -168,53 +172,115 @@
 	</div>
 </nav>
 
-      <div class="body-wrap">
+      <div class="body-wrap"><article id="post-ES实现站内搜索" class="article article-type-post" itemscope itemprop="blogPost">
   
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2016" class="archive-year">2016</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/10/05/又一个情怀产品/" class="archive-article-date">
-  	<time datetime="2016-10-05T07:47:00.000Z" itemprop="datePublished">10月 5</time>
+    <div class="article-meta">
+      <a href="/2016/12/29/ES实现站内搜索/" class="article-date">
+  	<time datetime="2016-12-28T17:01:29.000Z" itemprop="datePublished">2016-12-29</time>
 </a>
-        </div>
-    	 
+    </div>
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/10/05/又一个情怀产品/">又一个情怀产品</a>
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      ES实现站内搜索
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+      </header>
+      
+      <div class="article-info article-info-post">
+        
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/互联网/">互联网</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ES/">ES</a></li></ul>
 	</div>
 
-          
+        
 
-        </div>
         <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
+      </div>
+      
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>#####需求:<br>   支持对用户名称的站内搜索<br>   用户分多个平台，在mysql跨表，需要搜索多个表<br>   百万用户记录<br>   mysql模糊匹配太慢</p>
+<p>#####解决:<br>  1.同步mysql数据到elasticsearch<br>  2.通过关键字到elasticsearch匹配，获取到数据(有mysql索引支持)<br>  3.在mysql检索，业务处理，返回客户端<br>注意: mysql与elasticsearch数据同步(全量更新+触发更新)</p>
+<p>#####参考:</p>
+<ul>
+<li><a href="https://www.elastic.co/guide/en/elasticsearch/client/php-api/current/_search_operations.html" target="_blank" rel="external">https://www.elastic.co/guide/en/elasticsearch/client/php-api/current/_search_operations.html</a></li>
+<li><a href="http://stackoverflow.com/questions/37914616/elasticsearch-query-does-not-support-query-string" target="_blank" rel="external">http://stackoverflow.com/questions/37914616/elasticsearch-query-does-not-support-query-string</a></li>
+</ul>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/12/25/扩展elasticsearch/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">扩展elasticsearch</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">Share to: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="ES实现站内搜索" data-title="ES实现站内搜索" data-url="http://yoursite.com/2016/12/29/ES实现站内搜索/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"oscersong007"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
 
 </div>
       <footer id="footer">
@@ -240,9 +306,9 @@
 		mathjax: true,
 		animate: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		root: /
