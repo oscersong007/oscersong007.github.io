@@ -69,13 +69,13 @@
 				<div class="tips-box hide">
 					<div class="tips-arrow"></div>
 					<ul class="tips-inner">
-						<li>Menu</li>
-						<li>Tags</li>
+						<li>菜单</li>
+						<li>Тэги</li>
 						
-						<li>Links</li>
+						<li>友情链接</li>
 						
 						
-						<li>Über</li>
+						<li>О сайте</li>
 						
 					</ul>
 				</div>
@@ -104,7 +104,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/504/" style="font-size: 10px;">504</a> <a href="/tags/ES/" style="font-size: 13.33px;">ES</a> <a href="/tags/cache/" style="font-size: 10px;">cache</a> <a href="/tags/es/" style="font-size: 10px;">es</a> <a href="/tags/golang/" style="font-size: 16.67px;">golang</a> <a href="/tags/php/" style="font-size: 20px;">php</a> <a href="/tags/pm2/" style="font-size: 10px;">pm2</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/互联网/" style="font-size: 10px;">互联网</a> <a href="/tags/异步/" style="font-size: 13.33px;">异步</a> <a href="/tags/技术/" style="font-size: 16.67px;">技术</a> <a href="/tags/接口/" style="font-size: 10px;">接口</a> <a href="/tags/接口优化/" style="font-size: 10px;">接口优化</a> <a href="/tags/日志/" style="font-size: 10px;">日志</a> <a href="/tags/监控/" style="font-size: 16.67px;">监控</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a> <a href="/tags/读书/" style="font-size: 16.67px;">读书</a> <a href="/tags/跑步/" style="font-size: 10px;">跑步</a> <a href="/tags/运营/" style="font-size: 10px;">运营</a>
+						<a href="/tags/504/" style="font-size: 10px;">504</a> <a href="/tags/ES/" style="font-size: 13.33px;">ES</a> <a href="/tags/cache/" style="font-size: 10px;">cache</a> <a href="/tags/es/" style="font-size: 10px;">es</a> <a href="/tags/golang/" style="font-size: 16.67px;">golang</a> <a href="/tags/php/" style="font-size: 20px;">php</a> <a href="/tags/pm2/" style="font-size: 10px;">pm2</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/wx/" style="font-size: 10px;">wx</a> <a href="/tags/互联网/" style="font-size: 10px;">互联网</a> <a href="/tags/异步/" style="font-size: 13.33px;">异步</a> <a href="/tags/技术/" style="font-size: 16.67px;">技术</a> <a href="/tags/接口/" style="font-size: 10px;">接口</a> <a href="/tags/接口优化/" style="font-size: 10px;">接口优化</a> <a href="/tags/日志/" style="font-size: 10px;">日志</a> <a href="/tags/监控/" style="font-size: 16.67px;">监控</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a> <a href="/tags/读书/" style="font-size: 16.67px;">读书</a> <a href="/tags/跑步/" style="font-size: 10px;">跑步</a> <a href="/tags/运营/" style="font-size: 10px;">运营</a>
 					</div>
 				</section>
 				
@@ -169,6 +169,107 @@
 </nav>
 
       <div class="body-wrap">
+  
+    <article id="post-让App灵活扩展" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/09/20/让App灵活扩展/" class="article-date">
+  	<time datetime="2016-09-20T15:42:31.000Z" itemprop="datePublished">2016-09-20</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/09/20/让App灵活扩展/">让App灵活扩展</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p> 对于一个商品App页面，一般不会直接显示商品列表。而是对商品分类，展示多个分类的商品信息<br> 来增加用户点击，带动收入。分类像热门，运动，女性，数码这些。可能对应的接口可是就是类似下面<br> 的格式：</p>
+<pre><code> {
+      errno: &quot;0&quot;,
+      end_state: &quot;1&quot;,
+      total: &quot;-1&quot;,
+      data: {
+          hot: {
+              data: []
+          },
+          sport: {
+              data: []
+          },
+          it: {
+              data: []
+          },
+          xx: {
+              data: []
+          },
+      }
+}
+</code></pre><p>对应到客户端也是直接解析具体字段并分类展示，还可能会存在部分硬编码。编程珠玑中提到 <em> 数据决定<br>程序结构 </em>， 那么什么决定数据结构呢？ 业务需求！ 上面接口数据格式，要是业务要增加一个分类呢？<br>服务接口添加业务逻辑，添加分类字段。客户端也要开发，等发版，放量，最后展示到用户整个周期是很长的。这种接口格式很难扩展功能。 怎么才能易于扩展呢？看看下面的格式：</p>
+<pre><code> {
+      errno: &quot;0&quot;,
+      end_state: &quot;1&quot;,
+      total: &quot;-1&quot;,
+      data: {
+          {
+              desc: hot,
+              data: []
+          },
+          {
+              desc: sport,
+              data: []
+          },
+          {
+              desc: it,
+              data: []
+          },
+          {
+              desc: xx,
+              data: []
+          },
+      }
+}
+</code></pre><p>这种格式客户端不需要知道有多少分类，data里面每个元素就是一个分类，分类里面有自己的描述信息，<br>数据信息。若要添加分类，只要服务端添加分类数据就行。线上直接生效，避免了客户端开发，发版，放量。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/接口/">接口</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
   
     <article id="post-运营后台的自动化与规范化" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -447,71 +548,6 @@ github: https://github.com/open-falcon
       
 	<div class="article-category tagcloud">
 	<a class="article-category-link" href="/categories/技术/">技术</a>
-	</div>
-
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-php常用设计模式整理" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/09/03/php常用设计模式整理/" class="article-date">
-  	<time datetime="2016-09-03T07:26:47.000Z" itemprop="datePublished">2016-09-03</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/09/03/php常用设计模式整理/">php常用设计模式整理</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h5 id="策略模式"><a href="#策略模式" class="headerlink" title="策略模式"></a>策略模式</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div></pre></td><td class="code"><pre><div class="line">&lt;?php  </div><div class="line">/** </div><div class="line">* 策略模式 </div><div class="line">* 定义一系列的算法,把每一个算法封装起来, 并且使它们可相互替换。本模式使得算法可独立于使用它的客户而变化 </div><div class="line">* </div><div class="line">*/   </div><div class="line">  </div><div class="line">  </div><div class="line">/** </div><div class="line">* 出行旅游 </div><div class="line">* </div><div class="line">*  </div><div class="line">*/  </div><div class="line">interface TravelStrategy&#123;  </div><div class="line">    public function travelAlgorithm();  </div><div class="line">&#125;   </div><div class="line">  </div><div class="line">  </div><div class="line">/** </div><div class="line"> * 具体策略类(ConcreteStrategy)1：乘坐飞机 </div><div class="line"> */  </div><div class="line">class AirPlanelStrategy implements TravelStrategy &#123;  </div><div class="line">    public function travelAlgorithm()&#123;  </div><div class="line">        echo &quot;travel by AirPlain&quot;, &quot;&lt;BR&gt;\r\n&quot;;   </div><div class="line">    &#125;  </div><div class="line">&#125;   </div><div class="line">  </div><div class="line">  </div><div class="line">/** </div><div class="line"> * 具体策略类(ConcreteStrategy)2：乘坐火车 </div><div class="line"> */  </div><div class="line">class TrainStrategy implements TravelStrategy &#123;  </div><div class="line">    public function travelAlgorithm()&#123;  </div><div class="line">        echo &quot;travel by Train&quot;, &quot;&lt;BR&gt;\r\n&quot;;   </div><div class="line">    &#125;  </div><div class="line">&#125;   </div><div class="line">  </div><div class="line">/** </div><div class="line"> * 具体策略类(ConcreteStrategy)3：骑自行车 </div><div class="line"> */  </div><div class="line">class BicycleStrategy implements TravelStrategy &#123;  </div><div class="line">    public function travelAlgorithm()&#123;  </div><div class="line">        echo &quot;travel by Bicycle&quot;, &quot;&lt;BR&gt;\r\n&quot;;   </div><div class="line">    &#125;  </div><div class="line">&#125;   </div><div class="line">  </div><div class="line">  </div><div class="line">  </div><div class="line">/** </div><div class="line"> *  </div><div class="line"> * 环境类(Context):用一个ConcreteStrategy对象来配置。维护一个对Strategy对象的引用。可定义一个接口来让Strategy访问它的数据。 </div><div class="line"> * 算法解决类，以提供客户选择使用何种解决方案： </div><div class="line"> */  </div><div class="line">class PersonContext&#123;  </div><div class="line">    private $_strategy = null;  </div><div class="line">  </div><div class="line">    public function __construct(TravelStrategy $travel)&#123;  </div><div class="line">        $this-&gt;_strategy = $travel;  </div><div class="line">    &#125;  </div><div class="line">    /** </div><div class="line">    * 旅行 </div><div class="line">    */  </div><div class="line">    public function setTravelStrategy(TravelStrategy $travel)&#123;  </div><div class="line">        $this-&gt;_strategy = $travel;  </div><div class="line">    &#125;  </div><div class="line">    /** </div><div class="line">    * 旅行 </div><div class="line">    */  </div><div class="line">    public function travel()&#123;  </div><div class="line">        return $this-&gt;_strategy -&gt;travelAlgorithm();  </div><div class="line">    &#125;  </div><div class="line">&#125;   </div><div class="line">  </div><div class="line">// 乘坐火车旅行  </div><div class="line">$person = new PersonContext(new TrainStrategy());  </div><div class="line">$person-&gt;travel();  </div><div class="line">  </div><div class="line">// 改骑自行车  </div><div class="line">$person-&gt;setTravelStrategy(new BicycleStrategy());  </div><div class="line">$person-&gt;travel();  </div><div class="line">  </div><div class="line">?&gt;</div></pre></td></tr></table></figure>
-<h5 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line">/**</div><div class="line"> *参考IBM官网：http://www.ibm.com/developerworks/cn/opensource/os-php-designptrns/</div><div class="line"> *@author http://www.phpddt.com</div><div class="line"> */</div><div class="line">//观察者</div><div class="line">interface IObserver </div><div class="line">&#123;</div><div class="line">	public function notify();</div><div class="line">&#125;</div><div class="line"></div><div class="line">//定义可以被观察的对象接口</div><div class="line">interface IObservable </div><div class="line">&#123;</div><div class="line">	public function addObserver($observer);</div><div class="line">&#125;</div><div class="line"></div><div class="line">//实现IObservable接口</div><div class="line">class MessageSystem Implements IObservable </div><div class="line">&#123;</div><div class="line">	private $_observers = array();</div><div class="line"></div><div class="line">	public function addObserver($observer)</div><div class="line">	&#123;</div><div class="line">		$this-&gt;_observers = $observer;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	public function doNotify()</div><div class="line">	&#123;</div><div class="line">		foreach($this-&gt;_observers as $o)</div><div class="line">		&#123;</div><div class="line">			$o-&gt;notify();</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">//实现IObserver接口</div><div class="line">class User Implements IObserver</div><div class="line">&#123;</div><div class="line">	public function __construct($username)</div><div class="line">	&#123;</div><div class="line">		echo &quot;我是新用户&#123;$username&#125;&lt;br/&gt;&quot;;</div><div class="line">	&#125;</div><div class="line">	//通知观察者方法</div><div class="line">	public function notify()</div><div class="line">	&#123;</div><div class="line">		echo &apos;欢迎新用户&apos;;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">//使用</div><div class="line">$u = new MessageSystem();</div><div class="line"></div><div class="line">$u-&gt;addObserver(new User(&apos;小明&apos;));</div><div class="line">//$u-&gt;addObserver(new User(&apos;小红&apos;));</div><div class="line">//$u-&gt;addObserver(new User(&apos;小黑&apos;));</div><div class="line"></div><div class="line">$u-&gt;doNotify();</div></pre></td></tr></table></figure>
-<h5 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">class A</div><div class="line">&#123;</div><div class="line">    protected static $_instance = null;</div><div class="line">    protected function __construct()</div><div class="line">    &#123;</div><div class="line">        //disallow new instance</div><div class="line">    &#125;</div><div class="line">    protected function __clone()&#123;</div><div class="line">        //disallow clone</div><div class="line">    &#125;</div><div class="line">    public function getInstance()</div><div class="line">    &#123;</div><div class="line">        if (self::$_instance === null) &#123;</div><div class="line">            self::$_instance = new self();</div><div class="line">        &#125;</div><div class="line">        return self::$_instance;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h5 id="工厂模式"><a href="#工厂模式" class="headerlink" title="工厂模式"></a>工厂模式</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">class DbFactory</div><div class="line">&#123;</div><div class="line"></div><div class="line">function static factory($db_class_name)</div><div class="line">&#123;</div><div class="line"></div><div class="line">        $db_class_name = strtolower($db_class_name);</div><div class="line"></div><div class="line">        if (include_once &apos;Drivers/&apos; . $db_class_name . &apos;.php&apos;) &#123;</div><div class="line"></div><div class="line">     </div><div class="line">            $classname = &apos;Driver_&apos; . $db_class_name;</div><div class="line">            return new $db_class_name;</div><div class="line">        &#125; else &#123;</div><div class="line">            throw new Exception (&apos;对应的数据库类没找到&apos;);</div><div class="line">        &#125; </div><div class="line"></div><div class="line"></div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h5 id="适配器模式"><a href="#适配器模式" class="headerlink" title="适配器模式"></a>适配器模式</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line"></div><div class="line"></div><div class="line">//目标角色</div><div class="line">interface Target &#123;</div><div class="line">	public function simpleMethod1();</div><div class="line">	public function simpleMethod2();</div><div class="line">&#125;</div><div class="line"></div><div class="line">//源角色</div><div class="line">class Adaptee &#123;</div><div class="line">	</div><div class="line">	public function simpleMethod1()&#123;</div><div class="line">		echo &apos;Adapter simpleMethod1&apos;;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">//类适配器角色</div><div class="line">class Adapter implements Target &#123;</div><div class="line">	private $adaptee;</div><div class="line">	</div><div class="line">	</div><div class="line">	function __construct(Adaptee $adaptee) &#123;</div><div class="line">		$this-&gt;adaptee = $adaptee; </div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	//委派调用Adaptee的sampleMethod1方法</div><div class="line">	public function simpleMethod1()&#123;</div><div class="line">		echo $this-&gt;adaptee-&gt;simpleMethod1();</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	public function simpleMethod2()&#123;</div><div class="line">		echo &apos;Adapter simpleMethod2&apos;; 	</div><div class="line">	&#125; </div><div class="line">	</div><div class="line">&#125;</div><div class="line"></div><div class="line">//客户端</div><div class="line">class Client &#123;</div><div class="line">	</div><div class="line">	public static function main() &#123;</div><div class="line">		$adaptee = new Adaptee();</div><div class="line">		$adapter = new Adapter($adaptee);</div><div class="line">		$adapter-&gt;simpleMethod1();</div><div class="line">		$adapter-&gt;simpleMethod2(); </div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">Client::main();</div><div class="line"></div><div class="line">?&gt;</div></pre></td></tr></table></figure>
-<h5 id="装饰器模式"><a href="#装饰器模式" class="headerlink" title="装饰器模式"></a>装饰器模式</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div></pre></td><td class="code"><pre><div class="line">//被装饰者基类</div><div class="line">interface Component</div><div class="line">&#123;</div><div class="line">    public function operation();</div><div class="line">&#125;</div><div class="line"> </div><div class="line">//装饰者基类</div><div class="line">abstract class Decorator implements Component</div><div class="line">&#123;</div><div class="line">    protected $component;</div><div class="line"> </div><div class="line">    public function __construct(Component $component)</div><div class="line">    &#123;</div><div class="line">        $this-&gt;component = $component;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    public function operation()</div><div class="line">    &#123;</div><div class="line">        $this-&gt;component-&gt;operation();</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"> </div><div class="line">//具体装饰者类</div><div class="line">class ConcreteComponent implements Component</div><div class="line">&#123;</div><div class="line">    public function operation()</div><div class="line">    &#123;</div><div class="line">        echo &apos;do operation&apos;.PHP_EOL;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"> </div><div class="line">//具体装饰类A</div><div class="line">class ConcreteDecoratorA extends Decorator &#123;</div><div class="line">    public function __construct(Component $component) &#123;</div><div class="line">        parent::__construct($component);</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    public function operation() &#123;</div><div class="line">        parent::operation();</div><div class="line">        $this-&gt;addedOperationA();   //  新增加的操作</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    public function addedOperationA() &#123;</div><div class="line">        echo &apos;Add Operation A &apos;.PHP_EOL;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"> </div><div class="line">//具体装饰类B</div><div class="line">class ConcreteDecoratorB extends Decorator &#123;</div><div class="line">    public function __construct(Component $component) &#123;</div><div class="line">        parent::__construct($component);</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    public function operation() &#123;</div><div class="line">        parent::operation();</div><div class="line">        $this-&gt;addedOperationB();</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    public function addedOperationB() &#123;</div><div class="line">        echo &apos;Add Operation B &apos;.PHP_EOL;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"> </div><div class="line"> </div><div class="line">class Client &#123;</div><div class="line"> </div><div class="line">    public static function main() &#123;</div><div class="line">        /*</div><div class="line">        do operation</div><div class="line">        Add Operation A</div><div class="line">        */</div><div class="line">        $decoratorA = new ConcreteDecoratorA(new ConcreteComponent());</div><div class="line">        $decoratorA-&gt;operation();</div><div class="line"> </div><div class="line"> </div><div class="line">        /*</div><div class="line">        do operation</div><div class="line">        Add Operation A </div><div class="line">        Add Operation B  </div><div class="line">        */</div><div class="line">        $decoratorB = new ConcreteDecoratorB($decoratorA);</div><div class="line">        $decoratorB-&gt;operation();</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;</div><div class="line"> </div><div class="line">Client::main();</div><div class="line">转自: http://www.phpddt.com/php/design-decoration.html</div></pre></td></tr></table></figure>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-	<a class="article-category-link" href="/categories/php/">php</a>
 	</div>
 
 
