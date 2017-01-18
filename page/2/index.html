@@ -75,7 +75,7 @@
 						<li>Links</li>
 						
 						
-						<li>Über</li>
+						<li>About</li>
 						
 					</ul>
 				</div>
@@ -104,7 +104,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/504/" style="font-size: 10px;">504</a> <a href="/tags/ES/" style="font-size: 13.33px;">ES</a> <a href="/tags/IK/" style="font-size: 10px;">IK</a> <a href="/tags/cache/" style="font-size: 10px;">cache</a> <a href="/tags/es/" style="font-size: 10px;">es</a> <a href="/tags/golang/" style="font-size: 16.67px;">golang</a> <a href="/tags/php/" style="font-size: 20px;">php</a> <a href="/tags/pm2/" style="font-size: 10px;">pm2</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/wx/" style="font-size: 10px;">wx</a> <a href="/tags/互联网/" style="font-size: 10px;">互联网</a> <a href="/tags/异步/" style="font-size: 13.33px;">异步</a> <a href="/tags/技术/" style="font-size: 16.67px;">技术</a> <a href="/tags/接口/" style="font-size: 10px;">接口</a> <a href="/tags/接口优化/" style="font-size: 10px;">接口优化</a> <a href="/tags/日志/" style="font-size: 10px;">日志</a> <a href="/tags/监控/" style="font-size: 16.67px;">监控</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a> <a href="/tags/读书/" style="font-size: 16.67px;">读书</a> <a href="/tags/跑步/" style="font-size: 10px;">跑步</a> <a href="/tags/运营/" style="font-size: 10px;">运营</a>
+						<a href="/tags/504/" style="font-size: 10px;">504</a> <a href="/tags/ES/" style="font-size: 13.33px;">ES</a> <a href="/tags/IK/" style="font-size: 10px;">IK</a> <a href="/tags/cache/" style="font-size: 10px;">cache</a> <a href="/tags/es/" style="font-size: 10px;">es</a> <a href="/tags/golang/" style="font-size: 16.67px;">golang</a> <a href="/tags/php/" style="font-size: 20px;">php</a> <a href="/tags/pm2/" style="font-size: 10px;">pm2</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/wx/" style="font-size: 10px;">wx</a> <a href="/tags/互联网/" style="font-size: 10px;">互联网</a> <a href="/tags/安全/" style="font-size: 10px;">安全</a> <a href="/tags/异步/" style="font-size: 13.33px;">异步</a> <a href="/tags/技术/" style="font-size: 16.67px;">技术</a> <a href="/tags/接口/" style="font-size: 10px;">接口</a> <a href="/tags/接口优化/" style="font-size: 10px;">接口优化</a> <a href="/tags/日志/" style="font-size: 10px;">日志</a> <a href="/tags/监控/" style="font-size: 16.67px;">监控</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a> <a href="/tags/读书/" style="font-size: 16.67px;">读书</a> <a href="/tags/跑步/" style="font-size: 10px;">跑步</a> <a href="/tags/运营/" style="font-size: 10px;">运营</a>
 					</div>
 				</section>
 				
@@ -169,6 +169,79 @@
 </nav>
 
       <div class="body-wrap">
+  
+    <article id="post-504" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/12/22/504/" class="article-date">
+  	<time datetime="2016-12-22T07:17:46.000Z" itemprop="datePublished">2016-12-22</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/12/22/504/">504</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>  08:45开始:</p>
+<p>####room服务:</p>
+<pre><code>1.  发现server 504 (nginx)
+2.  [1040] Too many connections (php-fpm)
+</code></pre><p>####server:</p>
+<pre><code>1.  nginx访问日志504.
+2.  (request: &quot;POST /index.php&quot;) execution timed out (136.359234 sec), terminating
+</code></pre><p>####处理：</p>
+<pre><code>1. 查看nginx 访问日志， 发现大量504
+2. 验证laravel框架错误，php错误日志，没发现错误。
+3. 在php-fpm日志中发现执行超时终止执行，可能php-fpm阻塞
+4. 重启cgi, nginx 返回200, 几分钟后又504了 (业务脚本对应服务器监控发现连接数飙升)
+5. 怀疑可能是mysql阻塞，上阿里云rds查看，半小时内连接数直线上升.可能是脚本不断重启造成。临时关闭本机cron脚本。不生效。
+6. rds临时扩容解决。
+</code></pre><p>####监控分析如下:<br>    7:40 — 8:10 业务脚本没有安全退出，pm2不停新启。半小时内phantomjs进程数达到100+，<br>    8:10 — 8:40 系统负载200+(机器双核)<br>    8:10 — 8:40 tcp连接数没采集到(系统负载过高)<br>    8:40-8:43 连接数增量350<br>    DB server : 08:45 — 09:10 连接数持续增长</p>
+<p>刚好接上开始故障现象。</p>
+<p>###总结:<br>    故障，可能是几小时之前触发的。<br>    系统负载过高时，会出现监控数据不全。<br>    服务之间共享资源使用需谨慎。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/504/">504</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
   
     <article id="post-Laravel重启单个队列" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -415,68 +488,9 @@
 
 
   
-    <article id="post-不要让CPU空转" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/11/26/不要让CPU空转/" class="article-date">
-  	<time datetime="2016-11-26T14:31:44.000Z" itemprop="datePublished">2016-11-26</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/11/26/不要让CPU空转/">不要让CPU空转</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>下面代码是使用固定数量线程来完成work. 定时检查线程数量，小于limit,则新启。但是若之前开启的线程短时间内等待网络IO，无法结束。<br>那就相当于短时间陷入死循环了。单个进程cpu使用超过100%，cpu不是正常工作，而是空转。</p>
-<p>解决： 加入 sleep, 让出cpu。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">for thread in threads:</div><div class="line">    thread.start()</div><div class="line">    while True:</div><div class="line">        if threading.activeCount() &lt; limit:</div><div class="line">            break</div><div class="line">        # add sleep()</div></pre></td></tr></table></figure>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
     </nav>
   
 </div>
