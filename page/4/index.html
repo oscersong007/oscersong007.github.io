@@ -170,6 +170,68 @@
 
       <div class="body-wrap">
   
+    <article id="post-爬虫代理" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/12/02/爬虫代理/" class="article-date">
+  	<time datetime="2016-12-02T10:39:38.000Z" itemprop="datePublished">2016-12-02</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/12/02/爬虫代理/">爬虫代理</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>尝试1：python实现，每个请求fork一次。<br>结果:  并发太大，系统负载飙升。strace发现系统调用clone,await过多。请求代理超时。</p>
+<p>尝试2：iptables nat转发，更新nat表<br>结果:  nat需要配置匹配概率,操作过程中可能大量refused.单个端口proxy数量有限制。</p>
+<p>尝试3：使用squid邻居代理功能，动态更新代理库<br>结果: 动态更新squid中proxy列表，整体加载。动态剔除不可用代理，数量无限制</p>
+<p>参考：<br><a href="https://www.webair.com/community/simple-stateful-load-balancer-with-iptables-and-nat/" target="_blank" rel="external">https://www.webair.com/community/simple-stateful-load-balancer-with-iptables-and-nat/</a></p>
+<p><a href="http://blog.chinaunix.net/uid-11121450-id-3294732.html" target="_blank" rel="external">http://blog.chinaunix.net/uid-11121450-id-3294732.html</a></p>
+<p><a href="http://blog.sina.com.cn/s/blog_4b427acf01019cer.html" target="_blank" rel="external">http://blog.sina.com.cn/s/blog_4b427acf01019cer.html</a></p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/技术/">技术</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-不要让CPU空转" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -403,65 +465,6 @@
 	</div>
 
       
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-cron秒级调度" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/10/27/cron秒级调度/" class="article-date">
-  	<time datetime="2016-10-27T09:42:15.000Z" itemprop="datePublished">2016-10-27</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/10/27/cron秒级调度/">cron秒级调度</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>配置文件格式：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">*/5, *, *, *, *, *#echo `date` &gt;&gt; /tmp/fortest</div></pre></td></tr></table></figure>
-<p>代码</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">package main</div><div class="line"></div><div class="line">import (</div><div class="line">    &quot;fmt&quot;</div><div class="line">    &quot;os&quot;</div><div class="line">    &quot;bufio&quot;</div><div class="line">    &quot;io&quot;</div><div class="line">    &quot;strings&quot;</div><div class="line">    &quot;os/exec&quot;</div><div class="line">    &quot;github.com/robfig/cron&quot;</div><div class="line">)</div><div class="line"></div><div class="line">func main() &#123;</div><div class="line"></div><div class="line">    c := cron.New()</div><div class="line">    f, err := os.Open(&quot;/root/bitcron&quot;)</div><div class="line">    if err != nil &#123;</div><div class="line">        panic(err)</div><div class="line">    &#125;</div><div class="line">    defer f.Close()</div><div class="line"></div><div class="line">    rd := bufio.NewReader(f)</div><div class="line">    for &#123;</div><div class="line">        line, err := rd.ReadString(&apos;\n&apos;) </div><div class="line">        </div><div class="line">	arr := strings.Split(line,&quot;#&quot;)</div><div class="line">        if err != nil || io.EOF == err &#123;</div><div class="line">            break</div><div class="line">        &#125;</div><div class="line"> c.AddFunc(arr[0], func() &#123;</div><div class="line">	exec.Command(&quot;/bin/bash&quot;, &quot;-c&quot;, arr[1]).Output()	</div><div class="line">	&#125;)</div><div class="line">        &#125;  </div><div class="line">    c.Start()</div><div class="line">    select &#123;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-	<div class="article-category tagcloud">
-	<a class="article-category-link" href="/categories/cron/">cron</a>
-	</div>
-
 
       
       <div class="clearfix"></div>
