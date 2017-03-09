@@ -104,7 +104,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/504/" style="font-size: 10px;">504</a> <a href="/tags/ES/" style="font-size: 16.67px;">ES</a> <a href="/tags/IK/" style="font-size: 10px;">IK</a> <a href="/tags/Nosql/" style="font-size: 13.33px;">Nosql</a> <a href="/tags/cache/" style="font-size: 10px;">cache</a> <a href="/tags/es/" style="font-size: 10px;">es</a> <a href="/tags/golang/" style="font-size: 16.67px;">golang</a> <a href="/tags/php/" style="font-size: 20px;">php</a> <a href="/tags/pm2/" style="font-size: 10px;">pm2</a> <a href="/tags/python/" style="font-size: 13.33px;">python</a> <a href="/tags/wx/" style="font-size: 10px;">wx</a> <a href="/tags/xx/" style="font-size: 10px;">xx</a> <a href="/tags/互联网/" style="font-size: 10px;">互联网</a> <a href="/tags/安全/" style="font-size: 10px;">安全</a> <a href="/tags/异步/" style="font-size: 13.33px;">异步</a> <a href="/tags/技术/" style="font-size: 16.67px;">技术</a> <a href="/tags/接口/" style="font-size: 10px;">接口</a> <a href="/tags/接口优化/" style="font-size: 10px;">接口优化</a> <a href="/tags/日志/" style="font-size: 10px;">日志</a> <a href="/tags/监控/" style="font-size: 16.67px;">监控</a> <a href="/tags/编程/" style="font-size: 10px;">编程</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a> <a href="/tags/读书/" style="font-size: 16.67px;">读书</a> <a href="/tags/跑步/" style="font-size: 10px;">跑步</a> <a href="/tags/运营/" style="font-size: 10px;">运营</a>
+						<a href="/tags/504/" style="font-size: 10px;">504</a> <a href="/tags/ES/" style="font-size: 16.67px;">ES</a> <a href="/tags/IK/" style="font-size: 10px;">IK</a> <a href="/tags/Nosql/" style="font-size: 13.33px;">Nosql</a> <a href="/tags/bitflow/" style="font-size: 10px;">bitflow</a> <a href="/tags/cache/" style="font-size: 10px;">cache</a> <a href="/tags/es/" style="font-size: 10px;">es</a> <a href="/tags/golang/" style="font-size: 16.67px;">golang</a> <a href="/tags/php/" style="font-size: 20px;">php</a> <a href="/tags/pm2/" style="font-size: 10px;">pm2</a> <a href="/tags/python/" style="font-size: 13.33px;">python</a> <a href="/tags/wx/" style="font-size: 10px;">wx</a> <a href="/tags/xx/" style="font-size: 10px;">xx</a> <a href="/tags/互联网/" style="font-size: 10px;">互联网</a> <a href="/tags/安全/" style="font-size: 10px;">安全</a> <a href="/tags/异步/" style="font-size: 13.33px;">异步</a> <a href="/tags/技术/" style="font-size: 16.67px;">技术</a> <a href="/tags/接口/" style="font-size: 10px;">接口</a> <a href="/tags/接口优化/" style="font-size: 10px;">接口优化</a> <a href="/tags/日志/" style="font-size: 10px;">日志</a> <a href="/tags/监控/" style="font-size: 16.67px;">监控</a> <a href="/tags/编程/" style="font-size: 10px;">编程</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a> <a href="/tags/读书/" style="font-size: 16.67px;">读书</a> <a href="/tags/跑步/" style="font-size: 10px;">跑步</a> <a href="/tags/运营/" style="font-size: 10px;">运营</a>
 					</div>
 				</section>
 				
@@ -169,6 +169,95 @@
 </nav>
 
       <div class="body-wrap">
+  
+    <article id="post-bitflow-v1" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/03/09/bitflow-v1/" class="article-date">
+  	<time datetime="2017-03-09T15:30:27.000Z" itemprop="datePublished">2017-03-09</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/09/bitflow-v1/">bitflow_v1</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>####服务分层</p>
+<blockquote>
+<p>展示层：     PC官网          微信公众号          小程序          商家          运营后台</p>
+<p>对外服务:           直播数据          搜索           红呗指数(主打)          网红电商</p>
+<p>数据处理:                  JobRunner       Scripts          Crontab     电商数据处理</p>
+<p>数据采集:          Spider-Service          Room-Service          Server-Service(辅助)</p>
+<p>基础服务:          DB(Mysql,Redis,Es)     MQ(kafka,Zookeeper)     Proxy    JumpServer</p>
+</blockquote>
+<p>####服务职责</p>
+<p>Spider-Service:</p>
+<pre><code>1. 定期抓取
+2. 对内提供代理抓取
+3. 安全破解
+</code></pre><p>Room-Service:</p>
+<pre><code>1. 直播间数据抓取 (长连接,轮训)
+2. 异步处理消息
+3. TimeOut通知JobRunner,超时结束
+</code></pre><p>Server-Service:</p>
+<pre><code>1. 配合Spider进行白名单监控
+2. /live/stop直播信息存储
+    3. 日数据,指数处理
+</code></pre><p>####业务上<br>    1.及时发现问题:<br>        业务运营:   反馈入口<br>        数据监控:   huajiao!!!<br>    2.新需求响应:<br>        要事第一！<br>        bug优先处理</p>
+<p>####技术上</p>
+<pre><code>1.服务中断。。。(数据监控)
+
+2.脚本太多。。。 (如何部署，在哪台机器)    bitflow-tools项目
+
+3.协作困难:
+
+    语言不统一 （python）
+
+    接口支持乱。。。职责不清，项目不清
+</code></pre><p>#####技术跟着业务改进!</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/bitflow/">bitflow</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
   
     <article id="post-Flask模块化" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -375,63 +464,6 @@
       
 	<div class="article-tag tagcloud">
 		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ES/">ES</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-MongoDB集群部署记录" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/02/08/MongoDB集群部署记录/" class="article-date">
-  	<time datetime="2017-02-08T07:31:53.000Z" itemprop="datePublished">2017-02-08</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/02/08/MongoDB集群部署记录/">MongoDB集群部署记录</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">1. 购买机器</div><div class="line">2. 添加DNS解析，处理数据盘。(逻辑卷管理,方便后期扩展)</div><div class="line">（	pvcreate /dev/vdb</div><div class="line">        vgcreate mg /dev/vdb</div><div class="line">        lvcreate -n mglv -L 199G mg</div><div class="line">        mkfs.ext4 /dev/mg/mglv</div><div class="line">        mkdir /mongo</div><div class="line">	设置自动挂载/etc/fstab</div><div class="line"> ）</div><div class="line">3. mongo 配置: (128;129;130)</div><div class="line"></div><div class="line">	实例配置及启动(128;129;130):</div><div class="line">	/usr/local/mongo/bin/mongod --configsvr --dbpath /mongo/data --port 27017 --logpath /mongo/logs/mongo.log  --fork</div><div class="line"></div><div class="line">	启动mongos(128;129;130):</div><div class="line">	/usr/local/mongo/bin/mongos --configdb 172.16.0.128:27017,172.16.0.129:27017,172.16.0.130:27017 --port 27300 --logpath /mongo/logs/mongos.log  --chunkSize 5  --fork</div><div class="line"></div><div class="line">	设置分片:</div><div class="line">	/usr/local/mongo/bin/mongod --shardsvr --replSet shard1 --port 27018 --dbpath /mongo/data/db/27018/ --logpath /mongo/logs/27018_shard1.log  --fork --nojournal --oplogSize 10</div><div class="line">	/usr/local/mongo/bin/mongod --shardsvr --replSet shard2 --port 27019 --dbpath /mongo/data/db/27019/ --logpath /mongo/logs/27019_shard2.log  --fork --nojournal --oplogSize 10</div><div class="line">	/usr/local/mongo/bin/mongod --shardsvr --replSet shard3 --port 27020 --dbpath /mongo/data/db/27020/ --logpath /mongo/logs/27020_shard3.log  --fork --nojournal --oplogSize 10</div><div class="line"></div><div class="line">	设置分片：</div><div class="line">&gt;/usr/local/mongodb/bin/mongo 127.0.0.1:27018</div><div class="line">use admin</div><div class="line">config = &#123; _id:&quot;shard1&quot;, members:[</div><div class="line">                     &#123;_id:0,host:&quot;172.16.0.128:27018&quot;&#125;,</div><div class="line">                     &#123;_id:1,host:&quot;172.16.0.129:27018&quot;&#125;,</div><div class="line">                     &#123;_id:2,host:&quot;172.16.0.130:27018&quot;,arbiterOnly:true&#125;</div><div class="line">                ]</div><div class="line">         &#125;</div><div class="line">rs.initiate(config); //只在初始化的时候运行一次</div><div class="line"></div><div class="line">&gt;/usr/local/mongodb/bin/mongo 127.0.0.1:27019</div><div class="line">use admin</div><div class="line">config = &#123; _id:&quot;shard2&quot;, members:[</div><div class="line">                     &#123;_id:0,host:&quot;172.16.0.128:27019&quot;&#125;,</div><div class="line">                     &#123;_id:1,host:&quot;172.16.0.129:27019&quot;&#125;,</div><div class="line">                     &#123;_id:2,host:&quot;172.16.0.130:27019&quot;,arbiterOnly:true&#125;</div><div class="line">                ]</div><div class="line">         &#125;</div><div class="line">rs.initiate(config); //只在初始化的时候运行一次</div><div class="line"></div><div class="line">&gt;/usr/local/mongodb/bin/mongo 127.0.0.1:27020</div><div class="line">use admin</div><div class="line">config = &#123; _id:&quot;shard3&quot;, members:[</div><div class="line">                     &#123;_id:0,host:&quot;172.16.0.128:27020&quot;&#125;,</div><div class="line">                     &#123;_id:1,host:&quot;172.16.0.130:27020&quot;&#125;,</div><div class="line">                     &#123;_id:2,host:&quot;172.16.0.129:27020&quot;,arbiterOnly:true&#125;</div><div class="line">                ]</div><div class="line">         &#125;</div><div class="line">rs.initiate(config); //只在初始化的时候运行一次</div><div class="line">	</div><div class="line"></div><div class="line">运行分片：（mongos）</div><div class="line">db.runCommand( &#123; addshard : &quot;shard1/172.16.0.128:27018,172.16.0.129:27018,172.16.0.130:27018&quot;&#125;);</div><div class="line"></div><div class="line">db.runCommand( &#123; addshard : &quot;shard2/172.16.0.128:27019,172.16.0.129:27019,172.16.0.130:27019”&#125;);</div><div class="line"></div><div class="line">db.runCommand( &#123; addshard : &quot;shard3/172.16.0.128:27020,172.16.0.129:27020,172.16.0.130:27020”&#125;);</div><div class="line"></div><div class="line"></div><div class="line">#指定testdb分片生效</div><div class="line">db.runCommand( &#123; enablesharding :&quot;testdb&quot;&#125;);</div><div class="line">#指定数据库里需要分片的集合和片键</div><div class="line">db.runCommand( &#123; shardcollection : &quot;testdb.table1&quot;,key : &#123;id: 1&#125; &#125; )</div><div class="line"></div><div class="line"></div><div class="line">// 添加认证</div><div class="line">db.addUser(&#123; user: &quot;instarx&quot;, pwd: &quot;instarx&quot;, roles: [&quot;readWrite&quot;] &#125;)</div><div class="line"></div><div class="line"></div><div class="line">验证：</div><div class="line"></div><div class="line">for (var i = 1; i &lt;= 100000; i++)</div><div class="line">db.table1.save(&#123;id:i,&quot;test1&quot;:&quot;testval1&quot;&#125;);</div><div class="line"></div><div class="line"></div><div class="line">mongos&gt; db.table1.stats()</div></pre></td></tr></table></figure>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Nosql/">Nosql</a></li></ul>
 	</div>
 
       

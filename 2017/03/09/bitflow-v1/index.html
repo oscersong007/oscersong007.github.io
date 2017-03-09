@@ -4,33 +4,30 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>让App灵活扩展 | 爱生活爱编码</title>
+  <title>bitflow_v1 | 爱生活爱编码</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="对于一个商品App页面，一般不会直接显示商品列表。而是对商品分类，展示多个分类的商品信息 来增加用户点击，带动收入。分类像热门，运动，女性，数码这些。可能对应的接口可是就是类似下面 的格式：
- {
-      errno: &amp;quot;0&amp;quot;,
-      end_state: &amp;quot;1&amp;quot;,
-      total: &amp;quot;-1&amp;quot;,
-      data:">
+  <meta name="description" content="####服务分层
+
+展示层：     PC官网          微信公众号          小程序          商家          运营后台
+对外服务:           直播数据          搜索           红呗指数(主打)          网红电商
+数据处理:                  JobRunner       Scripts">
 <meta property="og:type" content="article">
-<meta property="og:title" content="让App灵活扩展">
-<meta property="og:url" content="http://yoursite.com/2016/09/20/让App灵活扩展/index.html">
+<meta property="og:title" content="bitflow_v1">
+<meta property="og:url" content="http://yoursite.com/2017/03/09/bitflow-v1/index.html">
 <meta property="og:site_name" content="爱生活爱编码">
-<meta property="og:description" content="对于一个商品App页面，一般不会直接显示商品列表。而是对商品分类，展示多个分类的商品信息 来增加用户点击，带动收入。分类像热门，运动，女性，数码这些。可能对应的接口可是就是类似下面 的格式：
- {
-      errno: &amp;quot;0&amp;quot;,
-      end_state: &amp;quot;1&amp;quot;,
-      total: &amp;quot;-1&amp;quot;,
-      data:">
-<meta property="og:updated_time" content="2016-09-20T16:13:41.000Z">
+<meta property="og:description" content="####服务分层
+
+展示层：     PC官网          微信公众号          小程序          商家          运营后台
+对外服务:           直播数据          搜索           红呗指数(主打)          网红电商
+数据处理:                  JobRunner       Scripts">
+<meta property="og:updated_time" content="2017-03-09T15:42:22.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="让App灵活扩展">
-<meta name="twitter:description" content="对于一个商品App页面，一般不会直接显示商品列表。而是对商品分类，展示多个分类的商品信息 来增加用户点击，带动收入。分类像热门，运动，女性，数码这些。可能对应的接口可是就是类似下面 的格式：
- {
-      errno: &amp;quot;0&amp;quot;,
-      end_state: &amp;quot;1&amp;quot;,
-      total: &amp;quot;-1&amp;quot;,
-      data:">
+<meta name="twitter:title" content="bitflow_v1">
+<meta name="twitter:description" content="####服务分层
+
+展示层：     PC官网          微信公众号          小程序          商家          运营后台
+对外服务:           直播数据          搜索           红呗指数(主打)          网红电商
+数据处理:                  JobRunner       Scripts">
   
   
     <link rel="icon" href="//favicon.icon">
@@ -184,11 +181,11 @@
 	</div>
 </nav>
 
-      <div class="body-wrap"><article id="post-让App灵活扩展" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-bitflow-v1" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/09/20/让App灵活扩展/" class="article-date">
-  	<time datetime="2016-09-20T15:42:31.000Z" itemprop="datePublished">2016-09-20</time>
+      <a href="/2017/03/09/bitflow-v1/" class="article-date">
+  	<time datetime="2017-03-09T15:30:27.000Z" itemprop="datePublished">2017-03-09</time>
 </a>
     </div>
   
@@ -201,7 +198,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      让App灵活扩展
+      bitflow_v1
     </h1>
   
 
@@ -210,7 +207,7 @@
       <div class="article-info article-info-post">
         
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/接口/">接口</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/bitflow/">bitflow</a></li></ul>
 	</div>
 
         
@@ -221,51 +218,39 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p> 对于一个商品App页面，一般不会直接显示商品列表。而是对商品分类，展示多个分类的商品信息<br> 来增加用户点击，带动收入。分类像热门，运动，女性，数码这些。可能对应的接口可是就是类似下面<br> 的格式：</p>
-<pre><code> {
-      errno: &quot;0&quot;,
-      end_state: &quot;1&quot;,
-      total: &quot;-1&quot;,
-      data: {
-          hot: {
-              data: []
-          },
-          sport: {
-              data: []
-          },
-          it: {
-              data: []
-          },
-          xx: {
-              data: []
-          },
-      }
-}
-</code></pre><p>对应到客户端也是直接解析具体字段并分类展示，还可能会存在部分硬编码。编程珠玑中提到 <em> 数据决定<br>程序结构 </em>， 那么什么决定数据结构呢？ 业务需求！ 上面接口数据格式，要是业务要增加一个分类呢？<br>服务接口添加业务逻辑，添加分类字段。客户端也要开发，等发版，放量，最后展示到用户整个周期是很长的。这种接口格式很难扩展功能。 怎么才能易于扩展呢？看看下面的格式：</p>
-<pre><code> {
-      errno: &quot;0&quot;,
-      end_state: &quot;1&quot;,
-      total: &quot;-1&quot;,
-      data: {
-          {
-              desc: hot,
-              data: []
-          },
-          {
-              desc: sport,
-              data: []
-          },
-          {
-              desc: it,
-              data: []
-          },
-          {
-              desc: xx,
-              data: []
-          },
-      }
-}
-</code></pre><p>这种格式客户端不需要知道有多少分类，data里面每个元素就是一个分类，分类里面有自己的描述信息，<br>数据信息。若要添加分类，只要服务端添加分类数据就行。线上直接生效，避免了客户端开发，发版，放量。</p>
+        <p>####服务分层</p>
+<blockquote>
+<p>展示层：     PC官网          微信公众号          小程序          商家          运营后台</p>
+<p>对外服务:           直播数据          搜索           红呗指数(主打)          网红电商</p>
+<p>数据处理:                  JobRunner       Scripts          Crontab     电商数据处理</p>
+<p>数据采集:          Spider-Service          Room-Service          Server-Service(辅助)</p>
+<p>基础服务:          DB(Mysql,Redis,Es)     MQ(kafka,Zookeeper)     Proxy    JumpServer</p>
+</blockquote>
+<p>####服务职责</p>
+<p>Spider-Service:</p>
+<pre><code>1. 定期抓取
+2. 对内提供代理抓取
+3. 安全破解
+</code></pre><p>Room-Service:</p>
+<pre><code>1. 直播间数据抓取 (长连接,轮训)
+2. 异步处理消息
+3. TimeOut通知JobRunner,超时结束
+</code></pre><p>Server-Service:</p>
+<pre><code>1. 配合Spider进行白名单监控
+2. /live/stop直播信息存储
+    3. 日数据,指数处理
+</code></pre><p>####业务上<br>    1.及时发现问题:<br>        业务运营:   反馈入口<br>        数据监控:   huajiao!!!<br>    2.新需求响应:<br>        要事第一！<br>        bug优先处理</p>
+<p>####技术上</p>
+<pre><code>1.服务中断。。。(数据监控)
+
+2.脚本太多。。。 (如何部署，在哪台机器)    bitflow-tools项目
+
+3.协作困难:
+
+    语言不统一 （python）
+
+    接口支持乱。。。职责不清，项目不清
+</code></pre><p>#####技术跟着业务改进!</p>
 
       
     </div>
@@ -275,18 +260,9 @@
     
 <nav id="article-nav">
   
-    <a href="/2016/09/25/近期看的书/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption"><</strong>
-      <div class="article-nav-title">
-        
-          近期看的书
-        
-      </div>
-    </a>
   
-  
-    <a href="/2016/09/11/运营后台的自动化与规范化/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">运营后台的自动化与规范化</div>
+    <a href="/2017/03/09/Flask模块化/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Flask模块化</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -321,7 +297,7 @@
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="让App灵活扩展" data-title="让App灵活扩展" data-url="http://yoursite.com/2016/09/20/让App灵活扩展/"></div>
+	<div class="ds-thread" data-thread-key="bitflow-v1" data-title="bitflow_v1" data-url="http://yoursite.com/2017/03/09/bitflow-v1/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
