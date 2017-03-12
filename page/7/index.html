@@ -75,7 +75,7 @@
 						<li>Links</li>
 						
 						
-						<li>About</li>
+						<li>Über</li>
 						
 					</ul>
 				</div>
@@ -169,6 +169,86 @@
 </nav>
 
       <div class="body-wrap">
+  
+    <article id="post-接口开发中共享资源的Cache处理" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/09/03/接口开发中共享资源的Cache处理/" class="article-date">
+  	<time datetime="2016-09-03T13:47:21.000Z" itemprop="datePublished">2016-09-03</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/09/03/接口开发中共享资源的Cache处理/">接口开发中共享资源的Cache处理</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <pre><code>这里共享资源的定义，就是多个用户可能同时访问到的资源。比如功能首页的列表，活动页面等等。
+</code></pre><h5 id="方案1：后台脚本刷新"><a href="#方案1：后台脚本刷新" class="headerlink" title="方案1：后台脚本刷新"></a>方案1：后台脚本刷新</h5><pre><code>通过后台脚本将后台配置的内容定时刷新到cache中，接口直接读对应键内容。
+
+特点：1. server主动更新Cache
+     2. 所有用户读到的内容都是一致的。
+     3. 如果后台没有设置有效期。前端接口可以100%读到数据
+
+适用场景: 对对象信息的处理，如商品信息，应用信息等。供其他服务适用
+</code></pre><h5 id="方案2：定时失效更新"><a href="#方案2：定时失效更新" class="headerlink" title="方案2：定时失效更新"></a>方案2：定时失效更新</h5><pre><code>一个用户读数据，缓存不存在时，访问db然后cache(固定有效期),最后返回给用户。之后在这段
+有效期内所有用户访问该数据会直接返回cache内容。等cache失效会重新读库并cache
+
+特点： 1. Cache随用户访问更新
+      2. 可能引发cache穿透。大量访问压向后台db,频繁更新无用的Cache
+      3. 为了处理穿透，部分用户访问的内容可能不同
+
+适用场景: 列表资源，涉及分页等处理。
+</code></pre><h6 id="如何处理穿透？"><a href="#如何处理穿透？" class="headerlink" title="如何处理穿透？"></a>如何处理穿透？</h6><pre><code>1. cache失效时，多个用户访问只许一个访问db（加锁）。别的用户访问到锁则不进行数据库访问
+2. cache失效，那些访问到锁又不查库。给用户返回空数据？ 不行！ 怎么处理？ 假失效！
+    如何假失效？ key 对应的数据 =》 （DB内容 + expire过期截止时间） 。 expire大于当前
+    时间说明失效，去访问DB，发现有锁，说明别人已经在更新缓存。自己则返回本该失效的内容。
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cache/">cache</a></li></ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/技术/">技术</a>
+	</div>
+
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
   
     <article id="post-php常用设计模式整理" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -497,80 +577,6 @@ func (this *RunningTask) RunTask(stateCh chan *TaskStateCount) {
       
 	<div class="article-category tagcloud">
 	<a class="article-category-link" href="/categories/技术/">技术</a>
-	</div>
-
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-对比tick与open-falcon" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/08/27/对比tick与open-falcon/" class="article-date">
-  	<time datetime="2016-08-27T06:25:38.000Z" itemprop="datePublished">2016-08-27</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/08/27/对比tick与open-falcon/">对比tick与open-falcon</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="架构图"><a href="#架构图" class="headerlink" title="架构图"></a>架构图</h2><h4 id="open-falcon"><a href="#open-falcon" class="headerlink" title="open-falcon"></a>open-falcon</h4><p><img src="http://oc1d7itlt.bkt.clouddn.com/falcon-arch.png?imageView2/2/w/800/h/400/interlace/0/q/100|watermark/2/text/b3NjZXJzb25nMDA3/font/5a6L5L2T/fontsize/500/fill/I0VGRUZFRg==/dissolve/53/gravity/SouthEast/dx/10/dy/10" alt="open-falcon"></p>
-<h4 id="tick"><a href="#tick" class="headerlink" title="tick"></a>tick</h4><p><img src="http://oc1d7itlt.bkt.clouddn.com/TICK-Stack.png?imageView2/2/w/800/h/400/interlace/0/q/100|watermark/2/text/b3NjZXJzb25nMDA3/font/5a6L5L2T/fontsize/500/fill/I0VGRUZFRg==/dissolve/53/gravity/SouthEast/dx/10/dy/10" alt="tick"></p>
-<h3 id="费用"><a href="#费用" class="headerlink" title="费用"></a>费用</h3><pre><code>F: 开源免费
-T: 部分免费，企业版特殊收费
-</code></pre><h3 id="扩展性"><a href="#扩展性" class="headerlink" title="扩展性"></a>扩展性</h3><pre><code>F: 大多组件可以水平扩展
-T: 免费版 influxDB单点，不支持集群
-</code></pre><h3 id="Agent"><a href="#Agent" class="headerlink" title="Agent"></a>Agent</h3><pre><code>F: agent留有api接口，用户可以直接上报数据到agent.这个设计也比较灵活
-T: 所有收集项都预编进telegraf,根据配置启动
-</code></pre><h3 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h3><pre><code>F: 组件多扩展性好。部署的组件也就多。部署成本高一些
-T: 免费版就四个组件。企业版目前不了解
-</code></pre><h3 id="易用性"><a href="#易用性" class="headerlink" title="易用性"></a>易用性</h3><pre><code>F: 报警，用户管理，收集数据等比较通用
-T: 对于agent不支持不方便接入。但是telegraf支持多个output
-</code></pre><h3 id="数据模型"><a href="#数据模型" class="headerlink" title="数据模型"></a>数据模型</h3><pre><code>数据模型tick优于open-falcon的。对于一个接口的数据可能有访问量，错误数，响应时间，上层处理时间等。tick一条数据直接包含所有指标。open-falcon需要多个。
-</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">open-falcon</div><div class="line"></div><div class="line">	 &#123;</div><div class="line">        &quot;endpoint&quot;: &quot;test-endpoint&quot;,</div><div class="line">        &quot;metric&quot;: &quot;test-metric2&quot;,</div><div class="line">        &quot;timestamp&quot;: ts,</div><div class="line">        &quot;step&quot;: 60,</div><div class="line">        &quot;value&quot;: 2,</div><div class="line">        &quot;counterType&quot;: &quot;GAUGE&quot;,</div><div class="line">        &quot;tags&quot;: &quot;idc=lg,loc=beijing&quot;,</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">tick</div><div class="line"></div><div class="line">	&#123;</div><div class="line">		&quot;metric&quot; : &quot;api&quot;,</div><div class="line">		&quot;fileds&quot; :	visit=3,ok=2,err=1,reqtime=0.3</div><div class="line">		&quot;tags&quot;   :  idc=lg,api=/index/index</div><div class="line">		&quot;timestamp&quot; : </div><div class="line">	&#125;</div></pre></td></tr></table></figure>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/监控/">监控</a></li></ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-	<a class="article-category-link" href="/categories/监控/">监控</a>
 	</div>
 
 

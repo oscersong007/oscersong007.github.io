@@ -75,7 +75,7 @@
 						<li>Links</li>
 						
 						
-						<li>About</li>
+						<li>Über</li>
 						
 					</ul>
 				</div>
@@ -169,6 +169,68 @@
 </nav>
 
       <div class="body-wrap">
+  
+    <article id="post-IK中文分词" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/01/05/IK中文分词/" class="article-date">
+  	<time datetime="2017-01-05T14:35:30.000Z" itemprop="datePublished">2017-01-05</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/01/05/IK中文分词/">IK中文分词</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>#####步骤</p>
+<pre><code>1. 使用IK默认的分词，对数据处理。
+2. 人工审核，纠正。然后热更新，丰富ES词库
+3. 循环1.2，可让ES正确处理网络用语
+</code></pre><p>#####测试<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">MacBook-Pro:Jobrunner$ php artisan for:test</div><div class="line">string(10) &quot;老#司机&quot;</div><div class="line">string(11) &quot;萌#萌#哒&quot;</div><div class="line">MacBook-Pro:Jobrunner$ php artisan for:test</div><div class="line">string(9) &quot;老司机&quot;</div><div class="line">string(9) &quot;萌萌哒&quot;</div></pre></td></tr></table></figure></p>
+<p>#####参考<br><a href="http://www.cnblogs.com/Hai--D/p/5751403.html" target="_blank" rel="external">http://www.cnblogs.com/Hai--D/p/5751403.html</a><br><a href="http://www.cnblogs.com/miao-zp/p/6008370.html" target="_blank" rel="external">http://www.cnblogs.com/miao-zp/p/6008370.html</a><br><a href="https://github.com/medcl/elasticsearch-analysis-ik" target="_blank" rel="external">https://github.com/medcl/elasticsearch-analysis-ik</a><br><a href="https://github.com/medcl/elasticsearch-analysis-ik/issues/256" target="_blank" rel="external">https://github.com/medcl/elasticsearch-analysis-ik/issues/256</a><br><a href="http://weblee.leanote.com/post/ElasticSearch-ik%E4%B8%AD%E6%96%87%E5%88%86%E8%AF%8D" target="_blank" rel="external">http://weblee.leanote.com/post/ElasticSearch-ik%E4%B8%AD%E6%96%87%E5%88%86%E8%AF%8D</a><br><a href="http://unpython.com/4/" target="_blank" rel="external">http://unpython.com/4/</a><br><a href="http://mojijs.com/2016/10/220251/index.html" target="_blank" rel="external">http://mojijs.com/2016/10/220251/index.html</a></p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/IK/">IK</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
   
     <article id="post-EasyWeChat微信开发" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -422,67 +484,6 @@
       
 	<div class="article-tag tagcloud">
 		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/504/">504</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Laravel重启单个队列" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/12/20/Laravel重启单个队列/" class="article-date">
-  	<time datetime="2016-12-20T14:21:15.000Z" itemprop="datePublished">2016-12-20</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/12/20/Laravel重启单个队列/">Laravel重启单个队列</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>队列处理器是 long-lived 进程，如果代码改变而队列处理器没有重启，新代码是不生效的。laravel建议使用</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">php artisan queue:restart</div></pre></td></tr></table></figure>
-<p>但是这个操作会关闭所有正在运行的队列处理器，不会重启。但是若有多个队列，有时可能只更新了单个队列处理的代码。那就只需要重启对应队列处理器就行。</p>
-<p>队列处理流程如下:(vendor/laravel/framework/src/Illuminate/Queue/Worker.php)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">public function daemon($connectionName, $queue = null, $delay = 0, $memory = 128, $sleep = 3, $maxTries = 0)</div><div class="line">&#123;</div><div class="line">    $lastRestart = $this-&gt;getTimestampOfLastQueueRestart();</div><div class="line">    while (true) &#123;</div><div class="line">        if ($this-&gt;daemonShouldRun()) &#123;</div><div class="line">            $this-&gt;runNextJobForDaemon(</div><div class="line">                $connectionName, $queue, $delay, $sleep, $maxTries</div><div class="line">            );</div><div class="line">        &#125; else &#123;</div><div class="line">            $this-&gt;sleep($sleep);</div><div class="line">        &#125;</div><div class="line">        if ($this-&gt;memoryExceeded($memory) || $this-&gt;queueShouldRestart($lastRestart)</div><div class="line">            || $this-&gt;inStopQueueSet($queue) ) &#123;</div><div class="line">            $this-&gt;stop();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">// 临时让指定queue自动关闭，用于重启单个queue</div><div class="line">protected function inStopQueueSet($queue) &#123;</div><div class="line">    return Redis::Sismember(&quot;laravel:stop:queues&quot;,$queue);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>重启操作如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">public function restart($queue) &#123;</div><div class="line">    Redis::Sadd(&quot;laravel:stop:queues&quot;,$queue);</div><div class="line">    while(true) &#123;</div><div class="line">        sleep(1);</div><div class="line">        $worker = $this-&gt;getWorkerNum($queue);</div><div class="line">        if ( $worker == 0) &#123;</div><div class="line">            echo &quot;active worker: $worker\n&quot;;</div><div class="line">            break;</div><div class="line">        &#125; else &#123;</div><div class="line">            echo &quot;active worker: $worker\n&quot;;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    Redis::Srem(&quot;laravel:stop:queues&quot;,$queue);</div><div class="line">    $configs = $this-&gt;getLocalConfig();</div><div class="line">    $worker = $configs[$queue];</div><div class="line">    echo &quot;start queue: $queue\n&quot;;</div><div class="line">    $this-&gt;process($queue,$worker,false);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/php/">php</a></li></ul>
 	</div>
 
       

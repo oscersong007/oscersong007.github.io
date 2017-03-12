@@ -75,7 +75,7 @@
 						<li>Links</li>
 						
 						
-						<li>About</li>
+						<li>Über</li>
 						
 					</ul>
 				</div>
@@ -169,6 +169,59 @@
 </nav>
 
       <div class="body-wrap">
+  
+    <article id="post-电商" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/03/12/电商/" class="article-date">
+  	<time datetime="2017-03-12T15:09:15.000Z" itemprop="datePublished">2017-03-12</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/12/电商/">电商</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>####电商平台主要功能:<br>    1.会员模块<br>    2.商品模块<br>    3.购物车模块<br>    4.配送模块<br>    5.订单模块<br>    6.支付模块<br>    7.结算模块<br>    8.统计模块</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
   
     <article id="post-bitflow-v1" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -413,63 +466,6 @@
       
 	<div class="article-tag tagcloud">
 		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Nosql/">Nosql</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Es优先精确匹配" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/02/09/Es优先精确匹配/" class="article-date">
-  	<time datetime="2017-02-09T14:58:04.000Z" itemprop="datePublished">2017-02-09</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/02/09/Es优先精确匹配/">Es优先精确匹配</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">$params[&apos;body&apos;][&apos;query&apos;][&apos;bool&apos;][&apos;should&apos;][] = [</div><div class="line">        &apos;query_string&apos; =&gt; [</div><div class="line">                    &apos;default_field&apos; =&gt; &apos;name&apos;, // 不分析，匹配权重高</div><div class="line">                &apos;query&apos; =&gt; $word,</div><div class="line">                &apos;boost&apos; =&gt; 2,</div><div class="line">        ]];</div><div class="line"></div><div class="line">$params[&apos;body&apos;][&apos;query&apos;][&apos;bool&apos;][&apos;should&apos;][] = [</div><div class="line">        &apos;query_string&apos; =&gt; [</div><div class="line">                &apos;default_field&apos; =&gt; &apos;name_index&apos;, // 分析，匹配权重低</div><div class="line">                &apos;query&apos; =&gt; $word,</div><div class="line">                &apos;boost&apos; =&gt; 1,</div><div class="line">        ]];</div></pre></td></tr></table></figure>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ES/">ES</a></li></ul>
 	</div>
 
       
