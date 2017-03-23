@@ -104,7 +104,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/504/" style="font-size: 10px;">504</a> <a href="/tags/ES/" style="font-size: 16.67px;">ES</a> <a href="/tags/IK/" style="font-size: 10px;">IK</a> <a href="/tags/Nosql/" style="font-size: 13.33px;">Nosql</a> <a href="/tags/bitflow/" style="font-size: 10px;">bitflow</a> <a href="/tags/cache/" style="font-size: 10px;">cache</a> <a href="/tags/es/" style="font-size: 10px;">es</a> <a href="/tags/golang/" style="font-size: 16.67px;">golang</a> <a href="/tags/php/" style="font-size: 20px;">php</a> <a href="/tags/pm2/" style="font-size: 10px;">pm2</a> <a href="/tags/python/" style="font-size: 13.33px;">python</a> <a href="/tags/wx/" style="font-size: 10px;">wx</a> <a href="/tags/xx/" style="font-size: 10px;">xx</a> <a href="/tags/互联网/" style="font-size: 10px;">互联网</a> <a href="/tags/安全/" style="font-size: 10px;">安全</a> <a href="/tags/异步/" style="font-size: 13.33px;">异步</a> <a href="/tags/技术/" style="font-size: 16.67px;">技术</a> <a href="/tags/接口/" style="font-size: 10px;">接口</a> <a href="/tags/接口优化/" style="font-size: 10px;">接口优化</a> <a href="/tags/日志/" style="font-size: 10px;">日志</a> <a href="/tags/监控/" style="font-size: 16.67px;">监控</a> <a href="/tags/编程/" style="font-size: 10px;">编程</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a> <a href="/tags/读书/" style="font-size: 16.67px;">读书</a> <a href="/tags/跑步/" style="font-size: 10px;">跑步</a> <a href="/tags/运营/" style="font-size: 10px;">运营</a>
+						<a href="/tags/504/" style="font-size: 10px;">504</a> <a href="/tags/ES/" style="font-size: 16.67px;">ES</a> <a href="/tags/IK/" style="font-size: 10px;">IK</a> <a href="/tags/Nosql/" style="font-size: 13.33px;">Nosql</a> <a href="/tags/bitflow/" style="font-size: 10px;">bitflow</a> <a href="/tags/cache/" style="font-size: 10px;">cache</a> <a href="/tags/es/" style="font-size: 13.33px;">es</a> <a href="/tags/golang/" style="font-size: 16.67px;">golang</a> <a href="/tags/php/" style="font-size: 20px;">php</a> <a href="/tags/pm2/" style="font-size: 10px;">pm2</a> <a href="/tags/python/" style="font-size: 13.33px;">python</a> <a href="/tags/wx/" style="font-size: 10px;">wx</a> <a href="/tags/xx/" style="font-size: 10px;">xx</a> <a href="/tags/互联网/" style="font-size: 10px;">互联网</a> <a href="/tags/安全/" style="font-size: 10px;">安全</a> <a href="/tags/异步/" style="font-size: 13.33px;">异步</a> <a href="/tags/技术/" style="font-size: 16.67px;">技术</a> <a href="/tags/接口/" style="font-size: 10px;">接口</a> <a href="/tags/接口优化/" style="font-size: 10px;">接口优化</a> <a href="/tags/日志/" style="font-size: 10px;">日志</a> <a href="/tags/监控/" style="font-size: 16.67px;">监控</a> <a href="/tags/编程/" style="font-size: 10px;">编程</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a> <a href="/tags/读书/" style="font-size: 16.67px;">读书</a> <a href="/tags/跑步/" style="font-size: 10px;">跑步</a> <a href="/tags/运营/" style="font-size: 10px;">运营</a>
 					</div>
 				</section>
 				
@@ -169,6 +169,70 @@
 </nav>
 
       <div class="body-wrap">
+  
+    <article id="post-扩展elasticsearch" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/12/25/扩展elasticsearch/" class="article-date">
+  	<time datetime="2016-12-25T05:00:21.000Z" itemprop="datePublished">2016-12-25</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/12/25/扩展elasticsearch/">扩展elasticsearch</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>####横向扩展添加新节点<br>配置:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">cluster.name: my-application</div><div class="line">node.name: es4.xxx.com</div><div class="line">path.data: /es</div><div class="line">path.logs: /es/logs</div><div class="line">network.host: 172.16.0.24</div><div class="line">discovery.zen.ping.multicast.enabled: false</div><div class="line">discovery.zen.ping.unicast.hosts: [&quot;172.16.0.25&quot;,&quot;172.16.0.26&quot;,&quot;172.16.0.24&quot;,&quot;172.16.0.57&quot;,&quot;172.16.0.58&quot;]</div></pre></td></tr></table></figure></p>
+<p>错误：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ERROR:</div><div class="line">	nested: IllegalArgumentException[No custom metadata prototype registered for type [licenses], node like missing plugins];</div><div class="line">Solution:</div></pre></td></tr></table></figure></p>
+<p>解决：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">./bin/plugin install license</div><div class="line">./bin/plugin install mobz/elasticsearch-head</div></pre></td></tr></table></figure></p>
+<p>####纵向扩展升级原有节点</p>
+<p>######1.关闭自动分片<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">curl -XPUT http://172.16.0.27:9200/_cluster/settings -d&apos;</div><div class="line"> &#123;</div><div class="line">     &quot;transient&quot; : &#123;</div><div class="line">         &quot;cluster.routing.allocation.enable&quot; : &quot;none&quot;</div><div class="line">     &#125;</div><div class="line"> &#125;&apos;</div></pre></td></tr></table></figure></p>
+<p>######2.升级配置，重启节点</p>
+<p>######3.开启自动分片<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">curl -XPUT http://172.16.0.27:9200/_cluster/settings -d&apos;</div><div class="line">&#123;</div><div class="line">    &quot;transient&quot; : &#123;</div><div class="line">        &quot;cluster.routing.allocation.enable&quot; : &quot;all&quot;</div><div class="line">    &#125;</div><div class="line">&#125;&apos;</div></pre></td></tr></table></figure></p>
+<p>#####参考<br>    <a href="http://www.tuicool.com/articles/RF7RBza" target="_blank" rel="external">http://www.tuicool.com/articles/RF7RBza</a></p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/es/">es</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
   
     <article id="post-504" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -405,68 +469,6 @@
       
 	<div class="article-tag tagcloud">
 		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/异步/">异步</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-爬虫代理" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/12/02/爬虫代理/" class="article-date">
-  	<time datetime="2016-12-02T10:39:38.000Z" itemprop="datePublished">2016-12-02</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/12/02/爬虫代理/">爬虫代理</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>尝试1：python实现，每个请求fork一次。<br>结果:  并发太大，系统负载飙升。strace发现系统调用clone,await过多。请求代理超时。</p>
-<p>尝试2：iptables nat转发，更新nat表<br>结果:  nat需要配置匹配概率,操作过程中可能大量refused.单个端口proxy数量有限制。</p>
-<p>尝试3：使用squid邻居代理功能，动态更新代理库<br>结果: 动态更新squid中proxy列表，整体加载。动态剔除不可用代理，数量无限制</p>
-<p>参考：<br><a href="https://www.webair.com/community/simple-stateful-load-balancer-with-iptables-and-nat/" target="_blank" rel="external">https://www.webair.com/community/simple-stateful-load-balancer-with-iptables-and-nat/</a></p>
-<p><a href="http://blog.chinaunix.net/uid-11121450-id-3294732.html" target="_blank" rel="external">http://blog.chinaunix.net/uid-11121450-id-3294732.html</a></p>
-<p><a href="http://blog.sina.com.cn/s/blog_4b427acf01019cer.html" target="_blank" rel="external">http://blog.sina.com.cn/s/blog_4b427acf01019cer.html</a></p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/技术/">技术</a></li></ul>
 	</div>
 
       

@@ -104,7 +104,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/504/" style="font-size: 10px;">504</a> <a href="/tags/ES/" style="font-size: 16.67px;">ES</a> <a href="/tags/IK/" style="font-size: 10px;">IK</a> <a href="/tags/Nosql/" style="font-size: 13.33px;">Nosql</a> <a href="/tags/bitflow/" style="font-size: 10px;">bitflow</a> <a href="/tags/cache/" style="font-size: 10px;">cache</a> <a href="/tags/es/" style="font-size: 10px;">es</a> <a href="/tags/golang/" style="font-size: 16.67px;">golang</a> <a href="/tags/php/" style="font-size: 20px;">php</a> <a href="/tags/pm2/" style="font-size: 10px;">pm2</a> <a href="/tags/python/" style="font-size: 13.33px;">python</a> <a href="/tags/wx/" style="font-size: 10px;">wx</a> <a href="/tags/xx/" style="font-size: 10px;">xx</a> <a href="/tags/互联网/" style="font-size: 10px;">互联网</a> <a href="/tags/安全/" style="font-size: 10px;">安全</a> <a href="/tags/异步/" style="font-size: 13.33px;">异步</a> <a href="/tags/技术/" style="font-size: 16.67px;">技术</a> <a href="/tags/接口/" style="font-size: 10px;">接口</a> <a href="/tags/接口优化/" style="font-size: 10px;">接口优化</a> <a href="/tags/日志/" style="font-size: 10px;">日志</a> <a href="/tags/监控/" style="font-size: 16.67px;">监控</a> <a href="/tags/编程/" style="font-size: 10px;">编程</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a> <a href="/tags/读书/" style="font-size: 16.67px;">读书</a> <a href="/tags/跑步/" style="font-size: 10px;">跑步</a> <a href="/tags/运营/" style="font-size: 10px;">运营</a>
+						<a href="/tags/504/" style="font-size: 10px;">504</a> <a href="/tags/ES/" style="font-size: 16.67px;">ES</a> <a href="/tags/IK/" style="font-size: 10px;">IK</a> <a href="/tags/Nosql/" style="font-size: 13.33px;">Nosql</a> <a href="/tags/bitflow/" style="font-size: 10px;">bitflow</a> <a href="/tags/cache/" style="font-size: 10px;">cache</a> <a href="/tags/es/" style="font-size: 13.33px;">es</a> <a href="/tags/golang/" style="font-size: 16.67px;">golang</a> <a href="/tags/php/" style="font-size: 20px;">php</a> <a href="/tags/pm2/" style="font-size: 10px;">pm2</a> <a href="/tags/python/" style="font-size: 13.33px;">python</a> <a href="/tags/wx/" style="font-size: 10px;">wx</a> <a href="/tags/xx/" style="font-size: 10px;">xx</a> <a href="/tags/互联网/" style="font-size: 10px;">互联网</a> <a href="/tags/安全/" style="font-size: 10px;">安全</a> <a href="/tags/异步/" style="font-size: 13.33px;">异步</a> <a href="/tags/技术/" style="font-size: 16.67px;">技术</a> <a href="/tags/接口/" style="font-size: 10px;">接口</a> <a href="/tags/接口优化/" style="font-size: 10px;">接口优化</a> <a href="/tags/日志/" style="font-size: 10px;">日志</a> <a href="/tags/监控/" style="font-size: 16.67px;">监控</a> <a href="/tags/编程/" style="font-size: 10px;">编程</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a> <a href="/tags/读书/" style="font-size: 16.67px;">读书</a> <a href="/tags/跑步/" style="font-size: 10px;">跑步</a> <a href="/tags/运营/" style="font-size: 10px;">运营</a>
 					</div>
 				</section>
 				
@@ -169,6 +169,71 @@
 </nav>
 
       <div class="body-wrap">
+  
+    <article id="post-es条件删除" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/03/23/es条件删除/" class="article-date">
+  	<time datetime="2017-03-23T08:42:56.000Z" itemprop="datePublished">2017-03-23</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/23/es条件删除/">es条件删除</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>#####安装插件<br>    bin/plugin install delete-by-query</p>
+<p>#####重启es节点</p>
+<p>#####删除操作:</p>
+<pre><code>$client = new Client([&apos;hosts&apos;=&gt;[&apos;http://es3.xx.net:9200&apos;]]);
+$params[&apos;index&apos;] = &apos;cmt_match_goods&apos;; 
+$params[&apos;type&apos;] = &apos;default&apos;; 
+$params[&apos;body&apos;][&apos;query&apos;][&apos;term&apos;][&apos;liveid&apos;] = xxx;  
+$ret = $client-&gt;deleteByQuery($params);
+</code></pre><p>####参考:<br>   <a href="https://www.elastic.co/guide/en/elasticsearch/plugins/2.0/plugins-delete-by-query.html" target="_blank" rel="external">https://www.elastic.co/guide/en/elasticsearch/plugins/2.0/plugins-delete-by-query.html</a><br>   <a href="http://www.developersite.org/905-193975-php" target="_blank" rel="external">http://www.developersite.org/905-193975-php</a></p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/es/">es</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
   
     <article id="post-阿里云磁盘扩容" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -410,60 +475,6 @@
 		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li></ul>
 	</div>
 
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Mysql索引" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/03/06/Mysql索引/" class="article-date">
-  	<time datetime="2017-03-06T13:37:48.000Z" itemprop="datePublished">2017-03-06</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/06/Mysql索引/">Mysql索引</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">mysql&gt; explain select * from taobao_goods_refer  where liveid=200184156149 and itemid=545968294976;</div><div class="line">+----+-------------+--------------------+------+---------------------------------+------+---------+------+--------+-------------+</div><div class="line">| id | select_type | table              | type | possible_keys                   | key  | key_len | ref  | rows   | Extra       |</div><div class="line">+----+-------------+--------------------+------+---------------------------------+------+---------+------+--------+-------------+</div><div class="line">|  1 | SIMPLE      | taobao_goods_refer | ALL  | liveid_uid_itemid,liveid_itemid | NULL | NULL    | NULL | 495819 | Using where |</div><div class="line">+----+-------------+--------------------+------+---------------------------------+------+---------+------+--------+-------------+</div><div class="line">1 row in set (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt; explain select * from taobao_goods_refer  where liveid=&apos;200184156149&apos; and itemid=545968294976;</div><div class="line">+----+-------------+--------------------+------+---------------------------------+---------------+---------+-------------+------+-----------------------+</div><div class="line">| id | select_type | table              | type | possible_keys                   | key           | key_len | ref         | rows | Extra                 |</div><div class="line">+----+-------------+--------------------+------+---------------------------------+---------------+---------+-------------+------+-----------------------+</div><div class="line">|  1 | SIMPLE      | taobao_goods_refer | ref  | liveid_uid_itemid,liveid_itemid | liveid_itemid | 90      | const,const |    1 | Using index condition |</div><div class="line">+----+-------------+--------------------+------+---------------------------------+---------------+---------+-------------+------+-----------------------+</div></pre></td></tr></table></figure>
-<p>####参考<br><a href="http://www.open-open.com/lib/view/open1478836003379.html" target="_blank" rel="external">http://www.open-open.com/lib/view/open1478836003379.html</a></p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
       
 
       
