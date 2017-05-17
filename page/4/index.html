@@ -75,7 +75,7 @@
 						<li>Links</li>
 						
 						
-						<li>Über</li>
+						<li>A propos</li>
 						
 					</ul>
 				</div>
@@ -104,7 +104,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/504/" style="font-size: 10px;">504</a> <a href="/tags/ES/" style="font-size: 16.67px;">ES</a> <a href="/tags/IK/" style="font-size: 10px;">IK</a> <a href="/tags/Nosql/" style="font-size: 13.33px;">Nosql</a> <a href="/tags/bitflow/" style="font-size: 10px;">bitflow</a> <a href="/tags/cache/" style="font-size: 10px;">cache</a> <a href="/tags/es/" style="font-size: 13.33px;">es</a> <a href="/tags/golang/" style="font-size: 16.67px;">golang</a> <a href="/tags/php/" style="font-size: 20px;">php</a> <a href="/tags/pm2/" style="font-size: 10px;">pm2</a> <a href="/tags/python/" style="font-size: 13.33px;">python</a> <a href="/tags/wx/" style="font-size: 10px;">wx</a> <a href="/tags/xx/" style="font-size: 10px;">xx</a> <a href="/tags/互联网/" style="font-size: 10px;">互联网</a> <a href="/tags/安全/" style="font-size: 10px;">安全</a> <a href="/tags/异步/" style="font-size: 13.33px;">异步</a> <a href="/tags/技术/" style="font-size: 16.67px;">技术</a> <a href="/tags/接口/" style="font-size: 10px;">接口</a> <a href="/tags/接口优化/" style="font-size: 10px;">接口优化</a> <a href="/tags/日志/" style="font-size: 10px;">日志</a> <a href="/tags/监控/" style="font-size: 16.67px;">监控</a> <a href="/tags/编程/" style="font-size: 10px;">编程</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a> <a href="/tags/读书/" style="font-size: 16.67px;">读书</a> <a href="/tags/跑步/" style="font-size: 10px;">跑步</a> <a href="/tags/运营/" style="font-size: 10px;">运营</a>
+						<a href="/tags/504/" style="font-size: 10px;">504</a> <a href="/tags/ES/" style="font-size: 16.67px;">ES</a> <a href="/tags/IK/" style="font-size: 10px;">IK</a> <a href="/tags/Nosql/" style="font-size: 13.33px;">Nosql</a> <a href="/tags/bitflow/" style="font-size: 10px;">bitflow</a> <a href="/tags/cache/" style="font-size: 10px;">cache</a> <a href="/tags/es/" style="font-size: 13.33px;">es</a> <a href="/tags/golang/" style="font-size: 16.67px;">golang</a> <a href="/tags/php/" style="font-size: 20px;">php</a> <a href="/tags/pm2/" style="font-size: 10px;">pm2</a> <a href="/tags/python/" style="font-size: 13.33px;">python</a> <a href="/tags/wx/" style="font-size: 10px;">wx</a> <a href="/tags/xx/" style="font-size: 10px;">xx</a> <a href="/tags/互联网/" style="font-size: 10px;">互联网</a> <a href="/tags/创业/" style="font-size: 10px;">创业</a> <a href="/tags/安全/" style="font-size: 10px;">安全</a> <a href="/tags/异步/" style="font-size: 13.33px;">异步</a> <a href="/tags/技术/" style="font-size: 16.67px;">技术</a> <a href="/tags/接口/" style="font-size: 10px;">接口</a> <a href="/tags/接口优化/" style="font-size: 10px;">接口优化</a> <a href="/tags/日志/" style="font-size: 10px;">日志</a> <a href="/tags/监控/" style="font-size: 16.67px;">监控</a> <a href="/tags/编程/" style="font-size: 10px;">编程</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a> <a href="/tags/读书/" style="font-size: 16.67px;">读书</a> <a href="/tags/跑步/" style="font-size: 10px;">跑步</a> <a href="/tags/运营/" style="font-size: 10px;">运营</a>
 					</div>
 				</section>
 				
@@ -169,6 +169,81 @@
 </nav>
 
       <div class="body-wrap">
+  
+    <article id="post-ES实现站内搜索" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/12/29/ES实现站内搜索/" class="article-date">
+  	<time datetime="2016-12-28T17:01:29.000Z" itemprop="datePublished">2016-12-29</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/12/29/ES实现站内搜索/">ES实现站内搜索</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>#####需求:</p>
+<ul>
+<li>支持对用户名称的站内搜索</li>
+<li>用户分多个平台，在mysql跨表，需要搜索多个表</li>
+<li>百万用户记录</li>
+<li>mysql模糊匹配太慢</li>
+</ul>
+<p>#####解决:</p>
+<ul>
+<li>1.同步mysql数据到elasticsearch</li>
+<li>2.通过关键字到elasticsearch匹配，获取到数据(有mysql索引支持)</li>
+<li>3.在mysql检索，业务处理，返回客户端</li>
+<li>注意: mysql与elasticsearch数据同步(全量更新+触发更新)</li>
+</ul>
+<p>#####参考:</p>
+<ul>
+<li><a href="https://www.elastic.co/guide/en/elasticsearch/client/php-api/current/_search_operations.html" target="_blank" rel="external">https://www.elastic.co/guide/en/elasticsearch/client/php-api/current/_search_operations.html</a></li>
+<li><a href="http://stackoverflow.com/questions/37914616/elasticsearch-query-does-not-support-query-string" target="_blank" rel="external">http://stackoverflow.com/questions/37914616/elasticsearch-query-does-not-support-query-string</a></li>
+</ul>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ES/">ES</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
   
     <article id="post-扩展elasticsearch" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -405,70 +480,6 @@
       
 	<div class="article-tag tagcloud">
 		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/php/">php</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Laravel队列" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/12/17/Laravel队列/" class="article-date">
-  	<time datetime="2016-12-17T15:14:09.000Z" itemprop="datePublished">2016-12-17</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/12/17/Laravel队列/">Laravel队列</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ol>
-<li>提交 — 对外提供API</li>
-<li>分发 — Controller将任务dispatch到任务队列</li>
-<li>执行 — worker  (队列维护,不同worker配置不同队列,更新代码时重启对应队列，队列之间互不干扰)</li>
-<li>持久化  — mysql   (worker执行结束,触发结束事件，执行操作4.5)</li>
-<li>通知 —  notify (redis,http api)</li>
-</ol>
-<p>参考：<br><a href="http://www.cnblogs.com/z1298703836/p/5346728.html" target="_blank" rel="external">http://www.cnblogs.com/z1298703836/p/5346728.html</a><br><a href="http://blog.csdn.net/qq43599939/article/details/53437409" target="_blank" rel="external">http://blog.csdn.net/qq43599939/article/details/53437409</a></p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/异步/">异步</a></li></ul>
 	</div>
 
       
